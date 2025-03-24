@@ -6,36 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACD Job Track</title>
 <link rel="stylesheet" href="style.css">
-<script src="scripts.js" defer></script>    
 </head>
 <body>
     <head>
         <h1>ACD JOB TRACK</h1>
     </head>
     <div class="container">
-        <table id="sop-table">
-            <tr>
-                <th>SOP</th>
-                <th>Written Up</th>
-                <th>Issued to factory</th>
-                <th>Factory Complete</th>
-                <th>Despatch</th>
-            </tr>
-            <tr>
-                <td>71717</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>Sent</td>
-            </tr>
-            <tr>
-                <td>77777</td>
-                <td>Yes</td>
-                <td>Yes</td>
-                <td>No</td>
-                <td>-</td>
-            </tr>
+        <table id="datatable" border="1">
+            <thead>
+                <tr>SOP</tr>
+                <tr>Written Up</tr>
+                <tr>Factory Issued</tr>
+            </thead>
         </table>
+        <tbody>
+            <!-- content to be generated here -->
+        </tbody>
     </div>
+    <script src="scripts.js" ></script>    
 </body>
 </html>
