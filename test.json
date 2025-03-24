@@ -7,6 +7,26 @@
             "FACTORY-COMPLETE":false,
             "DISPATCH":null,
             "LOGS":{
+                "202503241000":{
+                    "USER":"Bob",
+                    "AREA":"WRITE-UP",
+                    "LINE":null,
+                    "STARTTIME":202503241000,
+                    "ENDTIME":202503241000,
+                    "DURATION":1,
+                    "STATUS":"COMPLETE",
+                    "NOTES":""
+                },
+                "202503241001":{
+                    "USER":"Bob",
+                    "AREA":"ISSUED-TO-FACTORY",
+                    "LINE":null,
+                    "STARTTIME":202503241001,
+                    "ENDTIME":202503241001,
+                    "DURATION":1,
+                    "STATUS":"COMPLETE",
+                    "NOTES":""
+                },
                 "202503241122":{
                     "USER":"Smith",
                     "AREA":"BEAMSAW",
@@ -37,6 +57,26 @@
                     "STATUS":"COMPLETE",
                     "NOTES":""
                 }
+            }
+        },
+        "88888":{
+            "SOP":88888,
+            "WRITTEN-UP":true,
+            "ISSUED-TO-FACTORY":false,
+            "FACTORY-COMPLETE":false,
+            "DISPATCH":null,
+            "LOGS":{
+                "202503241200":{
+                    "USER":"Bob",
+                    "AREA":"WRITE-UP",
+                    "LINE":null,
+                    "STARTTIME":202503241200,
+                    "ENDTIME":202503241200,
+                    "DURATION":1,
+                    "STATUS":"COMPLETE",
+                    "NOTES":""
+                }
+                
             }
         }
     }

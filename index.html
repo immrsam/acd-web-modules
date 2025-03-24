@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=ACFD, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACD Job Track</title>
 <link rel="stylesheet" href="style.css">
 <script src="scripts.js" defer></script>    
@@ -12,27 +13,29 @@
         <h1>ACD JOB TRACK</h1>
     </head>
     <div class="container">
-        <form action="">
-            <div class="left">
-                <div class="form-label">
-                    <label for="sop">SOP</label>
-                    <input type="text" name="sop" id="sop">
-                </div>  
-                    
-                <div class="form-label">
-                    <label for="user">USER</label>
-                    <input type="text" name="user" id="user">
-                </div>  
-                <div class="form-label">
-                    <label for="area">AREA</label>
-                    <input type="text" name="area" id="area">
-                </div>    
-            </div>
-            <div class="right">
-            <input type="button" value="start"><br>
-            <input type="button" value="end"><br>
-            </div>
-        </form>
+        <table id="sop-table">
+            <tr>
+                <th>SOP</th>
+                <th>Written Up</th>
+                <th>Issued to factory</th>
+                <th>Factory Complete</th>
+                <th>Despatch</th>
+            </tr>
+            <tr>
+                <td>71717</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>Sent</td>
+            </tr>
+            <tr>
+                <td>77777</td>
+                <td>Yes</td>
+                <td>Yes</td>
+                <td>No</td>
+                <td>-</td>
+            </tr>
+        </table>
     </div>
 </body>
 </html>
