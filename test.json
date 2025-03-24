@@ -1,0 +1,44 @@
+{
+    "orders":{
+        "77777":{
+            "SOP":77777,
+            "WRITTEN-UP":true,
+            "ISSUED-TO-FACTORY":true,
+            "FACTORY-COMPLETE":false,
+            "DISPATCH":null,
+            "LOGS":{
+                "202503241122":{
+                    "USER":"Smith",
+                    "AREA":"BEAMSAW",
+                    "LINE":1,
+                    "STARTTIME":202503241030,
+                    "ENDTIME":202503241122,
+                    "DURATION":52,
+                    "STATUS":"COMPLETE",
+                    "NOTES":""
+                },
+                "202503241309":{
+                    "USER":"Bill",
+                    "AREA":"DET",
+                    "LINE":1,
+                    "STARTTIME":202503241300,
+                    "ENDTIME":202503241309,
+                    "DURATION":9,
+                    "STATUS":"WIP",
+                    "NOTES":"change blade"
+                },
+                "202503241520":{
+                    "USER":"Frank",
+                    "AREA":"DET",
+                    "LINE":1,
+                    "STARTTIME":202503241450,
+                    "ENDTIME":202503241520,
+                    "DURATION":30,
+                    "STATUS":"COMPLETE",
+                    "NOTES":""
+                }
+            }
+        }
+    }
+    
+}
