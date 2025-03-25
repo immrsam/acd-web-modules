@@ -6,13 +6,14 @@ function getData(url) {
     .then(response => response.json())
     .then(data => {
       jsonData = data;
-      if(!window.location.pathname.includes('results.html')) {
-        populateData();
-      }else{
+      if(window.location.pathname.includes('results.html')) {
         displayOrderDetails();
+      }else if(window.location.pathname.includes('JobList.html')) {          
+        populateData();
+      }else {
+        console.log("OTHER PAGE");        
       }
     }).catch(e => console.error('Error loading data: ', e));
-
 }
 
 function populateData(){
@@ -115,14 +116,49 @@ function displayOrderDetails(){
       row.appendChild(notesCell);
 
       tableBody.appendChild(row);
-    }
-    
-    
+    }    
   }
 }
 
+// //--------------------------------------------------------//
+// // LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
+// //--------------------------------------------------------//
+// function saveData(){
+//   localStorage.setItem('orderData', JSON.stringify(jsonData));
+//   console.log('Data saved locally');
+  
+// }
 
-
+if (document.getElementById(`orderForm`)) {
+  document.getElementById(`orderForm`).addEventListener('submit', function(e) {
+    e.preventDefault(e);
+    const sop = document.getElementById(`sop`).value;
+    const messageDiv = document.getElementById(`messageDiv`);
+    if (!sop){
+      messageDiv.textContent = "Please enter a valid SOP";
+      return;
+    }
+    if (jsonData.orders[sop]){
+      messageDiv.textContent = "SOP exists";
+      return;
+    }
+    
+    jsonData.orders[sop] = {
+      SOP: parseInt(sop),
+      'WRITTEN-UP': false,
+      'ISSED-TO-FACTORY': false,
+      'FACTORY-COPMLETE': false,
+      'DISPATCH': null,
+      'LOGS':{}
+    };
+    
+    // saveData();
+    console.log("NEW SOP created: ", jsonData.orders[sop]);
+    messageDiv.textContent = `SOP ${sop} successfully created!`;
+    
+    
+  })
+}
 
 document.addEventListener('DOMContentLoaded', () => {
       getData(url);
