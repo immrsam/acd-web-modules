@@ -123,11 +123,10 @@ function displayOrderDetails(){
 // //--------------------------------------------------------//
 // // LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
 // //--------------------------------------------------------//
-// function saveData(){
-//   localStorage.setItem('orderData', JSON.stringify(jsonData));
-//   console.log('Data saved locally');
-  
-// }
+function saveData(){
+  localStorage.setItem('orderData', JSON.stringify(jsonDataString));
+  console.log('Data saved locally');  
+}
 
 if (document.getElementById(`orderForm`)) {
   document.getElementById(`orderForm`).addEventListener('submit', function(e) {
