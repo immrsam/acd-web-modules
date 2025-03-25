@@ -1,4 +1,4 @@
-
+const url = './test.json';
 let jsonData;
 
 function getData(url) {
@@ -6,8 +6,13 @@ function getData(url) {
     .then(response => response.json())
     .then(data => {
       jsonData = data;
-      populateData();
-    });
+      if(!window.location.pathname.includes('results.html')) {
+        populateData();
+      }else{
+        displayOrderDetails();
+      }
+    }).catch(e => console.error('Error loading data: ', e));
+
 }
 
 function populateData(){
@@ -21,7 +26,10 @@ function populateData(){
     
     //SOP cell
     const sopCell = document.createElement('td');
-    sopCell.textContent = order.SOP;
+    const sopLink = document.createElement('a');
+    sopLink.href = `results.html?sop=${order.SOP}`;
+    sopLink.textContent = order.SOP;
+    sopCell.appendChild(sopLink);
     row.appendChild(sopCell);
     
     //written up cell
@@ -43,4 +51,65 @@ function populateData(){
   }
 }
 
-getData("./test.json");
+function displayOrderDetails(){
+  if(!window.location.pathname.includes('results.html')) return;
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const sop = urlParams.get(`sop`);
+
+  const order = jsonData.orders[sop]
+  const sogContainer = document.getElementById('sop-number').textContent = `SOP: ${order.SOP}`;
+  const tableBody = document.querySelector('#logTable tbody');
+  tableBody.innerHTML = ''; // clear any existing rows
+  
+  if (order.LOGS && Object.keys(order.LOGS).length > 0)  {
+    
+    for(const logId in order.LOGS){
+      const row = document.createElement('tr');
+      const log = order.LOGS[logId];
+      //user cell
+      const userCell = document.createElement('td');
+      userCell.textContent = log.USER;
+      row.appendChild(userCell);
+      //area cell
+      const areaCell = document.createElement('td');
+      areaCell.textContent = log.AREA;
+      row.appendChild(areaCell);
+      //line cell
+      const lineCell = document.createElement('td');
+      lineCell.textContent = log.LINE;
+      row.appendChild(lineCell);
+      //starttime cell
+      const startTimeCell = document.createElement('td');
+      startTimeCell.textContent = log.STARTTIME;
+      row.appendChild(startTimeCell);
+      //endtime cell
+      const endTimeCell = document.createElement('td');
+      endTimeCell.textContent = log.STARTTIME;
+      row.appendChild(endTimeCell);
+      //duration cell
+      const durationCell = document.createElement('td');
+      durationCell.textContent = log.DURATION;
+      row.appendChild(durationCell);
+      //status cell
+      const statusCell = document.createElement('td');
+      statusCell.textContent = log.STATUS;
+      row.appendChild(statusCell);
+      //notes cell
+      const notesCell = document.createElement('td');
+      notesCell.textContent = log.NOTES;
+      row.appendChild(notesCell);
+
+      tableBody.appendChild(row);
+    }
+    
+    
+  }
+}
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+      getData(url);
+})
