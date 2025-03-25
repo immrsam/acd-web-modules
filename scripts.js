@@ -159,6 +159,43 @@ if (document.getElementById(`orderForm`)) {
   })
 }
 
+function getCurrentTime(){
+  const date = new Date();
+  let hours = date.getHours();
+  let mins = date.getMinutes();
+  let results = "" + hours + mins;
+  return results;
+}
+
+function getDuration(start, end){
+  let startInt = parseInt(start);
+  let endInt = parseInt(end);
+  let result = endInt - startInt;
+  if (result < 1) {return 1}
+  return result;
+}
+
+let timerStarted = false;
+let startTime = ""
+let endTime = ""
+
+
+document.getElementById('startTimer').addEventListener('click', function(e){
+  timerStarted = true;
+  startTime = getCurrentTime()
+  document.getElementById('startTime').innerHTML = startTime;
+})
+document.getElementById('endTimer').addEventListener('click', function(e){
+  if(!timerStarted){
+    document.getElementById('endTime').innerHTML = "Start timer first";
+    return
+  }
+  endTime = getCurrentTime();
+  document.getElementById('endTime').innerHTML = endTime;
+  
+  document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
+})
+
 document.addEventListener('DOMContentLoaded', () => {
       getData(url);
 })
