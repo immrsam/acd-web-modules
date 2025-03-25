@@ -43,6 +43,20 @@ function populateData(){
     row.appendChild(factoryIssuedCell);
     
     //factory issued cell
+    const factoryCompleteCell = document.createElement('td');
+    factoryCompleteCell.textContent = order['FACTORY-COMPLETE'] ? 'Yes' : 'No';
+    row.appendChild(factoryCompleteCell);
+    
+    //Last location
+    const locationCell = document.createElement('td');
+    locationCell.textContent = "-";
+    if (order.LOGS && Object.keys(order.LOGS).length > 0){
+      let last = Object.keys(order.LOGS).sort().pop();
+      locationCell.textContent = order.LOGS[last].AREA;
+    }
+    row.appendChild(locationCell);
+
+    //dispatch cell
     const dispatchCell = document.createElement('td');
     dispatchCell.textContent = order.DISPATCH;
     row.appendChild(dispatchCell);
