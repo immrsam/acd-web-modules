@@ -123,12 +123,35 @@ function displayOrderDetails(){
   }
 }
 
-// //--------------------------------------------------------//
-// // LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
-// //--------------------------------------------------------//
+//--------------------------------------------------------//
+// LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
+//--------------------------------------------------------//
 function saveData(){
-  localStorage.setItem('orderData', JSON.stringify(jsonDataString));
+  localStorage.setItem('orderData', JSON.stringify(jsonData));
   console.log('Data saved locally');  
+}
+
+async function exportData(overwrite = false){
+  const data = JSON.stringify(jsonData, null, 2);
+  // const data = localStorage.getItem('orderData');
+  if(overwrite && targetFileHandle){
+    const writable = await targetFileHandle.createWritable();
+    await writable.write(data);
+    await writable.close();
+    alert('test.json overwrtitten');
+  }else{
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'test.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  // console.log({data});
+  
 }
 
 if (document.getElementById(`orderForm`)) {
@@ -154,13 +177,17 @@ if (document.getElementById(`orderForm`)) {
       'LOGS':{}
     };
     
-    // saveData();
+    saveData();
     console.log("NEW SOP created: ", jsonData.orders[sop]);
     messageDiv.textContent = `SOP ${sop} successfully created!`;
     
     
   })
 }
+
+// -----------------
+// SCAN PAGE SCRIPTS
+// -----------------
 
 function getCurrentTime(){
   const date = new Date();
@@ -178,16 +205,19 @@ function getDuration(start, end){
   return result;
 }
 
-let timerStarted = false;
-let startTime = ""
-let endTime = ""
-
+// Chack if page is on Scan.html
 if(window.location.pathname.includes('Scan.html')) {
+  // BASIC TIMER 
+  let timerStarted = false;
+  let startTime = ""
+  let endTime = ""
+  
   document.getElementById('startTimer').addEventListener('click', function(e){
     timerStarted = true;
     startTime = getCurrentTime()
     document.getElementById('startTime').innerHTML = startTime;
   })
+  
   document.getElementById('endTimer').addEventListener('click', function(e){
     if(!timerStarted){
       document.getElementById('endTime').innerHTML = "Start timer first";
@@ -198,6 +228,40 @@ if(window.location.pathname.includes('Scan.html')) {
     
     document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
   })
+
+  // File handeling
+  
+  let targetFileHandle = null;
+  document.getElementById('fileInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    //Chrome and Edge only
+    if ('showSaveFilePicker' in window) {
+      try {
+        console.log("showSaveFilePicker");
+        targetFileHandle = await window.showSaveFilePicker({
+          suggestedName: 'test.json',
+          types: [{
+            description: 'JSON Files',
+            accept: { 'application/json': ['.json']}
+          }]
+        })
+        await exportData(true);
+      } catch(err){
+        console.log("User canceled save");  
+        console.error(err);
+        
+        
+      }
+    }
+  })
+
+  document.getElementById('overwriteBtn').addEventListener('click', () => {
+    console.log("OVERWRITE BUTTON");
+    document.getElementById('fileInput').click();
+  })
+
 }
 
 // ---------------
