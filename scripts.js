@@ -1,14 +1,17 @@
 const url = './test.json';
 let jsonData;
 
-function getData(url) {
+function getData(url) {                  
   fetch(url)
     .then(response => response.json())
     .then(data => {
       jsonData = data;
+      console.log("CHECKING");                  
       if(window.location.pathname.includes('results.html')) {
+        console.log("results");                  
         displayOrderDetails();
-      }else if(window.location.pathname.includes('JobList.html')) {          
+      }else if(window.location.pathname.includes('JobList.html')) {
+        console.log("JobList");                  
         populateData();
       }else {
         console.log("OTHER PAGE");        
@@ -179,23 +182,27 @@ let timerStarted = false;
 let startTime = ""
 let endTime = ""
 
+if(window.location.pathname.includes('Scan.html')) {
+  document.getElementById('startTimer').addEventListener('click', function(e){
+    timerStarted = true;
+    startTime = getCurrentTime()
+    document.getElementById('startTime').innerHTML = startTime;
+  })
+  document.getElementById('endTimer').addEventListener('click', function(e){
+    if(!timerStarted){
+      document.getElementById('endTime').innerHTML = "Start timer first";
+      return
+    }
+    endTime = getCurrentTime();
+    document.getElementById('endTime').innerHTML = endTime;
+    
+    document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
+  })
+}
 
-document.getElementById('startTimer').addEventListener('click', function(e){
-  timerStarted = true;
-  startTime = getCurrentTime()
-  document.getElementById('startTime').innerHTML = startTime;
-})
-document.getElementById('endTimer').addEventListener('click', function(e){
-  if(!timerStarted){
-    document.getElementById('endTime').innerHTML = "Start timer first";
-    return
-  }
-  endTime = getCurrentTime();
-  document.getElementById('endTime').innerHTML = endTime;
-  
-  document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
-})
-
+// ---------------
+// load everything
+// ---------------
 document.addEventListener('DOMContentLoaded', () => {
-      getData(url);
+  getData(url);
 })
