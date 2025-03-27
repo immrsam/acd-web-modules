@@ -14,7 +14,7 @@
     <div class="container">
         <form id="orderForm">
             <div class="formLine">
-                <label for="sop">SOP Number</label>
+                <label for="sop">SOP</label>
                 <input type="number" id="sop" required>
             </div>
             <div class="formLine">
@@ -25,31 +25,36 @@
                 <label for="location">AREA</label>
                 <input list="locations" id="location" name="location" onchange="updateOptions()" required/>
                 <datalist id="locations">
-                    <option value="Office"></option>
-                    <option value="Fire Doors"></option>
+                    <option value="OFFICE"></option>
+                    <option value="FIRE-DOORS"></option>
                     <option value="DET"></option>
-                    <option value="Factory 10"></option>
-                    <option value="Non Rated"></option>
-                    <option value="Despatch"></option>
+                    <option value="FACTORY-10"></option>
+                    <option value="NON-RATED"></option>
+                    <option value="DESPATCH"></option>
                 </datalist>
             </div>
             <div class="formLine" >
-                <label for="sub-option">Sub Options</label>
+                <label for="sub-option">SUB AREA</label>
                 <input list="sub-options" id="sub-option" name="sub-option" required/>
                 <datalist id="sub-options"></option>
                 </datalist>
             </div>
-
+            <div class="formLine">
+                <button type="button" id="startTimer">START</button>
+                <input type="text" name="startTimeInput" id="startTimeInput" required>
+            </div>
+            <div class="formLine">
+                <button type="button" id="endTimer">END</button>
+                <input type="text" name="endTimeInput" id="endTimeInput" required>
+            </div>
             <button type="submit">Submit</button>
             <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
             <div id="messageDiv"></div>
         </form>
         <button id="exportBtn">Export to test.json</button>
         
-        <button id="startTimer">START</button>
         <div id="startTime"> </div>
         
-        <button id="endTimer">END</button>
         <div id="endTime"> </div>
         <div id="duration"> </div>
     </div>

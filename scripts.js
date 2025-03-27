@@ -95,7 +95,7 @@ function displayOrderDetails(){
       row.appendChild(startTimeCell);
       //endtime cell
       const endTimeCell = document.createElement('td');
-      endTimeCell.textContent = log.STARTTIME;
+      endTimeCell.textContent = log.ENDTIME;
       row.appendChild(endTimeCell);
       //duration cell
       const durationCell = document.createElement('td');
@@ -129,10 +129,22 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })
 
+// ---------------------------------------------------------------------//
+//                              SCAN PAGE SCRIPTS                       //
+// ---------------------------------------------------------------------//
 
 //--------------------------------------------------------//
 // LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
 //--------------------------------------------------------//
+function startTime(){
+  const startTime = document.getElementById('startTimeInput').innerHTML = getCurrentTime();
+  console.log(getCurrentTime());
+  
+}
+function endTime(){
+  const endTime = document.getElementById('endTime').innerHTML = getCurrentTime();
+}
+
 if (window.location.pathname.includes('Scan.html')) {
   console.log("Scan loaded");
   
@@ -147,6 +159,7 @@ if (window.location.pathname.includes('Scan.html')) {
       
   }
 
+
   // Order form handler
   if (orderForm) {
       orderForm.addEventListener('submit', function(e) {
@@ -155,7 +168,8 @@ if (window.location.pathname.includes('Scan.html')) {
           const user = document.getElementById('user').value.trim();
           const area = document.getElementById('location').value.trim();
           const subArea = document.getElementById('sub-option').value.trim();
-          
+          const startTime = document.getElementById('startTimeInput').value.trim();
+          const endTime = document.getElementById('endTimeInput').value.trim();           
 
 
           if (!sop) {
@@ -178,9 +192,9 @@ if (window.location.pathname.includes('Scan.html')) {
                 "USER":user,
                 "AREA":subArea + ' - ' + area,
                 "LINE":null,
-                "STARTTIME":1200,
-                "ENDTIME":1400,
-                "DURATION":120,
+                "STARTTIME":startTime,
+                "ENDTIME":endTime,
+                "DURATION":getDuration(startTime, endTime),
                 "STATUS":"COMPLETE",
                 "NOTES":""
               }
@@ -270,21 +284,18 @@ if (window.location.pathname.includes('Scan.html')) {
       messageDiv.className = type;
   }
 }
-// -----------------
-// SCAN PAGE SCRIPTS
-// -----------------
 
 // -----------------
 // Datalist populate
 // -----------------
 
 const locationOptions = {
-    "Office":["Written Up"],
-    "Fire Doors":["Beam Saw", "Wall Saw", "Panel Saw", "Cold Press"],
-    "DET":["DET Machine"],
-    "Factory 10":["CNC", "Edge Runner"],
-    "Non-rated":["Beam Saw", "Wall Saw", "Panel Saw", "Cold Press"],
-    "Despatch":["Wrapped", "Sent"]
+    "OFFICE":["WRITTEN-UP", "ISSUED-FACTORY","FACTORY-COMPLETE"],
+    "FIRE-DOORS":["BEAM-SAW","WALL-SAW","PANEL-SAW","COLD-PRESS","HOT-PRESS","SPINDLE-MOULDER","UPCUT-SAW","FRAMING","HAND-TOOLS"],
+    "DET":["DET-MACHINE","HAND-TOOLS"],
+    "FACTORY-10":["CNC", "EDGE-RUNNER","HAND-TOOLS", "UPCUT-SAW"],
+    "NON-RATED":["BEAM-SAW","WALL-SAW","PANEL-SAW","COLD-PRESS","UPCUT-SAW","FRAMING","HAND-TOOLS"],
+    "DESPATCH":["WRAPPED","SENT"]
   }
 
 function updateOptions() {
@@ -304,7 +315,7 @@ function updateOptions() {
   subOptionDatalist.innerHTML = '';
   
   const selectedLocation = locationInput.value;
-    
+  
   if(locationOptions[selectedLocation]){
     locationOptions[selectedLocation].forEach(option => {
       const optionElement = document.createElement('option');
@@ -320,11 +331,11 @@ function updateOptions() {
 // Timer
 // -----------------
 function getCurrentTime(){
-  const date = new Date();
-  let hours = date.getHours();
-  let mins = date.getMinutes();
-  let results = "" + hours + mins;
-  return results;
+  const now = new Date();
+  const timestamp = 
+    String(now.getHours()).padStart(2, '0') + 
+    String(now.getMinutes()).padStart(2, '0');
+  return timestamp;
 }
 
 function getDuration(start, end){
@@ -345,7 +356,7 @@ if(window.location.pathname.includes('Scan.html')) {
   document.getElementById('startTimer').addEventListener('click', function(e){
     timerStarted = true;
     startTime = getCurrentTime()
-    document.getElementById('startTime').innerHTML = startTime;
+    document.getElementById('startTimeInput').value = startTime;
   })
   
   document.getElementById('endTimer').addEventListener('click', function(e){
@@ -354,7 +365,7 @@ if(window.location.pathname.includes('Scan.html')) {
       return
     }
     endTime = getCurrentTime();
-    document.getElementById('endTime').innerHTML = endTime;
+    document.getElementById('endTimeInput').value = endTime;
     
     document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
   })
