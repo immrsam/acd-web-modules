@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -12,20 +13,45 @@
     </header>
     <div class="container">
         <form id="orderForm">
-            <label for="sop">Order Number</label>
-            <input type="number" name="sop" id="sop" required>
+            <div class="formLine">
+                <label for="sop">SOP Number</label>
+                <input type="number" id="sop" required>
+            </div>
+            <div class="formLine">
+                <label for="user">USER</label>
+                <input type="text" id="user" required>
+            </div>
+            <div class="formLine">
+                <label for="location">AREA</label>
+                <input list="locations" id="location" name="location" onchange="updateOptions()" required/>
+                <datalist id="locations">
+                    <option value="Office"></option>
+                    <option value="Fire Doors"></option>
+                    <option value="DET"></option>
+                    <option value="Factory 10"></option>
+                    <option value="Non Rated"></option>
+                    <option value="Despatch"></option>
+                </datalist>
+            </div>
+            <div class="formLine" >
+                <label for="sub-option">Sub Options</label>
+                <input list="sub-options" id="sub-option" name="sub-option" required/>
+                <datalist id="sub-options"></option>
+                </datalist>
+            </div>
+
             <button type="submit">Submit</button>
+            <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
+            <div id="messageDiv"></div>
         </form>
-        <div id="messageDiv"></div>
+        <button id="exportBtn">Export to test.json</button>
+        
         <button id="startTimer">START</button>
         <div id="startTime"> </div>
         
         <button id="endTimer">END</button>
         <div id="endTime"> </div>
         <div id="duration"> </div>
-        <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
-        <button id="overwriteBtn">SAVE</button>
-
     </div>
     <script src="scripts.js"></script>
 </body>

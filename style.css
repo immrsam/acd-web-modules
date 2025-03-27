@@ -6,8 +6,23 @@
 }
 form{
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 10px;
+}
+
+form button{
+width: 150px;
+}
+
+.formLine{
+    display: flex;
+    padding: 5px;
+}
+
+.formLine label{
+min-width: 110px;
+
 }
 
 .left{
