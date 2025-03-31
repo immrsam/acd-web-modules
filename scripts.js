@@ -210,18 +210,21 @@ if (window.location.pathname.includes('Scan.html')) {
               return;
           }
 
+          // -----------------------------------
+          // Move new order to 'admin' dashboard
+          // -----------------------------------
           // Create new order matching existing structure
-          jsonData.orders[sop] = {
-              SOP: parseInt(sop),
-              'WRITTEN-UP': false,
-              'ISSUED-TO-FACTORY': false,
-              'FACTORY-COMPLETE': false,
-              'DISPATCH': null,
-              'LOGS': {}
-          };
+          // jsonData.orders[sop] = {
+          //     SOP: parseInt(sop),
+          //     'WRITTEN-UP': false,
+          //     'ISSUED-TO-FACTORY': false,
+          //     'FACTORY-COMPLETE': false,
+          //     'DISPATCH': null,
+          //     'LOGS': {}
+          // };
 
-          showMessage(`Order ${sop} created successfully!`, 'success');
-          localStorage.setItem('orderData', JSON.stringify(jsonData));
+          showMessage(`Order ${sop} not in system`, 'fail');
+          // localStorage.setItem('orderData', JSON.stringify(jsonData));
           orderForm.reset();
       });
   }
@@ -293,7 +296,7 @@ const locationOptions = {
     "OFFICE":["WRITTEN-UP", "ISSUED-FACTORY","FACTORY-COMPLETE"],
     "FIRE-DOORS":["BEAM-SAW","WALL-SAW","PANEL-SAW","COLD-PRESS","HOT-PRESS","SPINDLE-MOULDER","UPCUT-SAW","FRAMING","HAND-TOOLS"],
     "DET":["DET-MACHINE","HAND-TOOLS"],
-    "FACTORY-10":["CNC", "EDGE-RUNNER","HAND-TOOLS", "UPCUT-SAW"],
+    "FACTORY-8":["CNC", "EDGE-RUNNER","HAND-TOOLS", "UPCUT-SAW"],
     "NON-RATED":["BEAM-SAW","WALL-SAW","PANEL-SAW","COLD-PRESS","UPCUT-SAW","FRAMING","HAND-TOOLS"],
     "DESPATCH":["WRAPPED","SENT"]
   }
@@ -367,7 +370,7 @@ if(window.location.pathname.includes('Scan.html')) {
     endTime = getCurrentTime();
     document.getElementById('endTimeInput').value = endTime;
     
-    document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
+    // document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
   })
 
   // File handeling

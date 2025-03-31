@@ -36,6 +36,16 @@
           "DURATION": 101,
           "STATUS": "COMPLETE",
           "NOTES": ""
+        },
+        "202504021110": {
+          "USER": "SAM",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": null,
+          "STARTTIME": "1008",
+          "ENDTIME": "1009",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
         }
       }
     },

@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>SCAN</h1>
+        <h1>SCAN PROGRESS</h1>
         <a href="index.html">Home</a>
     </header>
     <div class="container">
@@ -28,7 +28,7 @@
                     <option value="OFFICE"></option>
                     <option value="FIRE-DOORS"></option>
                     <option value="DET"></option>
-                    <option value="FACTORY-10"></option>
+                    <option value="FACTORY-8"></option>
                     <option value="NON-RATED"></option>
                     <option value="DESPATCH"></option>
                 </datalist>
@@ -47,17 +47,20 @@
                 <button type="button" id="endTimer">END</button>
                 <input type="text" name="endTimeInput" id="endTimeInput" required>
             </div>
+            
+                <label for="notesInput">Notes</label>
+                <textarea type="text" name="notesInput" id="notesInput" rows="5" col="4"></textarea>
+            
             <button type="submit">Submit</button>
             <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
+            
             <div id="messageDiv"></div>
         </form>
         <button id="exportBtn">Export to test.json</button>
         
-        <div id="startTime"> </div>
-        
-        <div id="endTime"> </div>
-        <div id="duration"> </div>
     </div>
+    <p><b>*BEFORE LEAVING PAGE*</b></p>
+    <p>Export the file and replace the existing JSON file in C:\Sam Bradbury\ACD_WEB_MODULES\test.json</p>
     <script src="scripts.js"></script>
 </body>
 </html>
