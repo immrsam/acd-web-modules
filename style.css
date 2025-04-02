@@ -1,3 +1,10 @@
+*,
+*::before,
+*::after{
+    box-sizing: border-box;
+    margin: 0;
+}
+
 .container{
     max-width: 800px;
     justify-content: center;

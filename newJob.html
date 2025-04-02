@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="scanStyle.css">
+    <title>New Job</title>
+</head>
+<body>
+    <header>
+        <h1>NEW JOB</h1>
+        <a href="index.html" class="btn dbg">Home</a>
+    </header>
+    <div class="container">
+        <form id="orderForm">
+            <div class="formLine">
+                <label for="sopNumber">SOP</label>
+                <input type="number" name="sopNumber" id="sopNumber" required>
+            </div>
+            <div class="formLine">
+                <label for="user">USER</label>
+                <input type="text" id="user" required>
+            </div>
+            <div class="formLine">
+                <label for="writtenUp">Written Up?</label>
+                <input type="checkbox" name="writtenUp" id="writtenUp" value="yes">
+            </div>
+            <div class="formLine">
+                <label for="notesInput">Notes</label>
+                <textarea type="text" name="notesInput" id="notesInput" rows="3" col="4"></textarea>
+            </div>
+            <div id="messageDiv" class="ow"></div>
+
+            <div class="formLine">
+
+                <button type="submit" class="btn lbg">Submit</button>
+                <button id="exportBtn" class="btn lbg">Export to test.json</button>
+            </div>
+            <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
+        </form>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

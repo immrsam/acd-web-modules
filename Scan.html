@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scanStyle.css">
 </head>
 <body>
     <header>
         <h1>SCAN PROGRESS</h1>
-        <a href="index.html">Home</a>
+        <a href="index.html" class="btn dbg">Home</a>
     </header>
-    <div class="container">
+    <section class="container">
         <form id="orderForm">
             <div class="formLine">
                 <label for="sop">SOP</label>
@@ -20,6 +20,10 @@
             <div class="formLine">
                 <label for="user">USER</label>
                 <input type="text" id="user" required>
+            </div>
+            <div class="formLine">
+                <label for="lineSelect">Line</label>
+                <input type="number" id="lineSelect" required>
             </div>
             <div class="formLine">
                 <label for="location">AREA</label>
@@ -40,25 +44,37 @@
                 </datalist>
             </div>
             <div class="formLine">
-                <button type="button" id="startTimer">START</button>
+                <button type="button" id="startTimer" class="btn lbg">START</button>
                 <input type="text" name="startTimeInput" id="startTimeInput" required>
             </div>
             <div class="formLine">
-                <button type="button" id="endTimer">END</button>
+                <button type="button" id="endTimer" class="btn lbg">END</button>
                 <input type="text" name="endTimeInput" id="endTimeInput" required>
             </div>
-            
+            <div class="formLine">
+                <label for="statusInput">Status</label>
+                <select name="statusInput" id="statusInput">
+                    <option value="COMPLETE">Complete</option>
+                    <option value="WIP">Work in progress</option>
+                </select>
+            </div>
+            <div class="formLine">
                 <label for="notesInput">Notes</label>
-                <textarea type="text" name="notesInput" id="notesInput" rows="5" col="4"></textarea>
-            
-            <button type="submit">Submit</button>
+            </div>
+            <div class="formLine">
+                <textarea type="text" name="notesInput" id="notesInput" rows="3" col="4"></textarea>
+                <div id="messageDiv" class="ow"></div>
+            </div>
+            <div class="formLine">
+
+                <button type="submit" class="btn lbg">Submit</button>
+                <button id="exportBtn" class="btn lbg">Export to test.json</button>
+            </div>
             <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
             
-            <div id="messageDiv"></div>
         </form>
-        <button id="exportBtn">Export to test.json</button>
         
-    </div>
+    </section>
     <p><b>*BEFORE LEAVING PAGE*</b></p>
     <p>Export the file and replace the existing JSON file in C:\Sam Bradbury\ACD_WEB_MODULES\test.json</p>
     <script src="scripts.js"></script>

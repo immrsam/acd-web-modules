@@ -115,6 +115,31 @@ function displayOrderDetails(){
   }
 }
 
+function setupSearch() {
+  const searchInput = document.getElementById('searchInput');
+  if (!searchInput) return;
+  
+  searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      const rows = document.querySelectorAll('#dataTable tbody tr');
+      let hasResults = false;
+      
+      rows.forEach(row => {
+          const sopCell = row.cells[0];
+          const sopText = sopCell.textContent.toLowerCase();
+          
+          if (sopText.includes(searchTerm)) {
+              row.style.display = '';
+              hasResults = true;
+          } else {
+              row.style.display = 'none';
+          }
+      });
+      
+      const noResults = document.getElementById('noResults');
+      noResults.style.display = hasResults ? 'none' : 'block';
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   getData('./test.json', (data) => {
@@ -123,6 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
       displayOrderDetails();
     }else if(window.location.pathname.includes('JobList.html')) {
       populateData();
+      setupSearch();
     }else {
       console.log("OTHER PAGE");        
     }
@@ -155,10 +181,8 @@ if (window.location.pathname.includes('Scan.html')) {
   // Load existing data if available
   if (!jsonData) {
       jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
-      console.log(jsonData);
-      
+      console.log(jsonData);      
   }
-
 
   // Order form handler
   if (orderForm) {
@@ -166,19 +190,22 @@ if (window.location.pathname.includes('Scan.html')) {
           e.preventDefault();
           const sop = document.getElementById('sop').value.trim();
           const user = document.getElementById('user').value.trim();
+          const lineSelect = document.getElementById('lineSelect').value.trim();
           const area = document.getElementById('location').value.trim();
           const subArea = document.getElementById('sub-option').value.trim();
           const startTime = document.getElementById('startTimeInput').value.trim();
           const endTime = document.getElementById('endTimeInput').value.trim();           
+          const notes = document.getElementById('notesInput').value.trim();           
+          const statusInput = document.getElementById('statusInput').value.trim();           
 
 
           if (!sop) {
-              showMessage('Please enter a valid SOP', 'error');
+              showMessage('Please enter a valid SOP');
               return;
           }
 
           if (jsonData.orders[sop]) {
-              showMessage(`Order ${sop} already exists`, 'warning');
+              // showMessage(`Order ${sop} already exists`);
               
               const now = new Date();
               const timestamp = 
@@ -191,12 +218,12 @@ if (window.location.pathname.includes('Scan.html')) {
               const newLog = {
                 "USER":user,
                 "AREA":subArea + ' - ' + area,
-                "LINE":null,
+                "LINE":lineSelect,
                 "STARTTIME":startTime,
                 "ENDTIME":endTime,
                 "DURATION":getDuration(startTime, endTime),
-                "STATUS":"COMPLETE",
-                "NOTES":""
+                "STATUS":statusInput,
+                "NOTES":notes
               }
 
               console.log(timestamp);
@@ -204,7 +231,7 @@ if (window.location.pathname.includes('Scan.html')) {
 
               jsonData.orders[sop].LOGS[timestamp] = newLog;
 
-              showMessage(`Order ${sop} updated successfully!`, 'success');
+              showMessage(`Order ${sop} updated successfully!`);
               localStorage.setItem('orderData', JSON.stringify(jsonData));
               orderForm.reset();
               return;
@@ -223,9 +250,9 @@ if (window.location.pathname.includes('Scan.html')) {
           //     'LOGS': {}
           // };
 
-          showMessage(`Order ${sop} not in system`, 'fail');
+          showMessage(`Order ${sop} not in system`);
           // localStorage.setItem('orderData', JSON.stringify(jsonData));
-          orderForm.reset();
+          // orderForm.reset();
       });
   }
 
@@ -281,12 +308,157 @@ if (window.location.pathname.includes('Scan.html')) {
   }
 
   // Helper function
-  function showMessage(text, type) {
+  function showMessage(text) {
       if (!messageDiv) return;
       messageDiv.textContent = text;
-      messageDiv.className = type;
   }
 }
+// ----------------
+// NEW JOB
+// ----------------
+if (window.location.pathname.includes('newJob.html')) {
+  console.log("New Job Loaded");
+  
+  const orderForm = document.getElementById('orderForm');
+  const exportBtn = document.getElementById('exportBtn');
+  const messageDiv = document.getElementById('messageDiv');
+
+  // Load existing data if available
+  if (!jsonData) {
+      jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
+      console.log(jsonData);      
+  }
+
+  // Order form handler
+  if (orderForm) {
+    console.log("STARTED ORDERFORM");
+    
+      orderForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          const sop = document.getElementById('sopNumber').value.trim();
+          const user = document.getElementById('user').value.trim();
+          const writtenUp = document.getElementById('writtenUp').value.checked;
+          const notes = document.getElementById('notesInput').value.trim();
+          console.log(writtenUp);
+          
+          if (!sop) {
+              showMessage('Please enter a valid SOP');
+              return;
+          }
+
+          if (!jsonData.orders[sop]) {
+              // showMessage(`Order ${sop} already exists`);
+              
+              const now = new Date();
+              const timestamp = 
+              now.getFullYear().toString() + 
+              String(now.getMonth() + 1).padStart(2, '0') + 
+              String(now.getDate() + 1).padStart(2, '0') + 
+              String(now.getHours() + 1).padStart(2, '0') + 
+              String(now.getMinutes() + 1).padStart(2, '0');
+              
+              // Create new order matching existing structure
+              jsonData.orders[sop] = {
+                  SOP: parseInt(sop),
+                  'WRITTEN-UP': writtenUp ? "Yes" : "No",
+                  'ISSUED-TO-FACTORY': false,
+                  'FACTORY-COMPLETE': false,
+                  'DISPATCH': null,
+                  'LOGS': {}
+              };
+
+              const newLog = {
+                "USER":user,
+                "AREA":"Office - " + (writtenUp ? "WRITEN-UP" : ""),
+                "LINE":null,
+                "STARTTIME":getCurrentTime(),
+                "ENDTIME":getCurrentTime(),
+                "DURATION":getDuration(startTime, endTime),
+                "STATUS":"COMPLETE",
+                "NOTES":notes
+              }
+
+              console.log(timestamp);
+              console.log(newLog);
+              console.log(jsonData);
+              
+
+              jsonData.orders[sop].LOGS[timestamp] = newLog;
+
+              showMessage(`Order ${sop} updated successfully!`);
+              localStorage.setItem('orderData', JSON.stringify(jsonData));
+              orderForm.reset();
+              return;
+          }
+
+        
+
+          showMessage(`Order ${sop} already in system`);
+          console.log(`Order ${sop} already in system`);
+          
+          // localStorage.setItem('orderData', JSON.stringify(jsonData));
+          // orderForm.reset();
+      });
+  }
+
+  function addNewLog(jsonData, sopNumber, user, area, subArea, notes = " "){
+    const now = new Date();
+    const timestamp = 
+    now.getFullYear().toString() + 
+    String(now.getMonth() + 1).padStart(2, '0') + 
+    String(now.getDate() + 1).padStart(2, '0') + 
+    String(now.getHours() + 1).padStart(2, '0') + 
+    String(now.getMinutes() + 1).padStart(2, '0');
+    
+    const newLog = {
+      "USER":user,
+      "AREA":subArea + ' - ' + area,
+      "LINE":null,
+      "STARTTIME":1200,
+      "ENDTIME":1400,
+      "DURATION":120,
+      "STATUS":"COMPLETE",
+      "NOTES":notes
+    }
+
+    console.log(newLog);
+    
+
+    if(!jsonData.orders[sopNumber].LOGS){
+      jsonData.orders[sopNumber].LOGS[timestamp] = newLog;
+
+    }
+    
+    return newLog;
+  }
+
+  // Export handler
+  if (exportBtn) {
+      exportBtn.addEventListener('click', function() {
+          const dataStr = JSON.stringify(jsonData, null, 2);
+          const blob = new Blob([dataStr], { type: 'application/json' });
+          const url = URL.createObjectURL(blob);
+          
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'test.json';
+          document.body.appendChild(a);
+          a.click();
+          
+          setTimeout(() => {
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+          }, 100);
+      });
+  }
+
+  // Helper function
+  function showMessage(text) {
+      if (!messageDiv) return;
+      messageDiv.textContent = text;
+  }
+}
+
 
 // -----------------
 // Datalist populate

@@ -1,8 +1,27 @@
 {
   "orders": {
+    "11223": {
+      "SOP": 11223,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031317": {
+          "USER": "Frank",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1216",
+          "ENDTIME": "1216",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "in place before write up"
+        }
+      }
+    },
     "12345": {
       "SOP": 12345,
-      "WRITTEN-UP": false,
+      "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
@@ -46,12 +65,61 @@
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
+        },
+        "202504021301": {
+          "USER": "Frank",
+          "AREA": "EDGE-RUNNER - FACTORY-8",
+          "LINE": null,
+          "STARTTIME": "1159",
+          "ENDTIME": "1200",
+          "DURATION": 41,
+          "STATUS": "COMPLETE",
+          "NOTES": "New note.\nNew line."
+        },
+        "202504021307": {
+          "USER": "Frank",
+          "AREA": "WALL-SAW - FIRE-DOORS",
+          "LINE": null,
+          "STARTTIME": "1204",
+          "ENDTIME": "1206",
+          "DURATION": 2,
+          "STATUS": "COMPLETE",
+          "NOTES": "Fixed"
+        },
+        "202504031214": {
+          "USER": "Bill",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": null,
+          "STARTTIME": "1113",
+          "ENDTIME": "1113",
+          "DURATION": 1,
+          "STATUS": "WIP",
+          "NOTES": "machine issue"
+        }
+      }
+    },
+    "55442": {
+      "SOP": 55442,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031315": {
+          "USER": "qwer",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1214",
+          "ENDTIME": "1214",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "afds"
         }
       }
     },
     "65321": {
       "SOP": 65321,
-      "WRITTEN-UP": true,
+      "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": true,
       "FACTORY-COMPLETE": true,
       "DISPATCH": "SENT",
@@ -118,12 +186,50 @@
         }
       }
     },
+    "72345": {
+      "SOP": 72345,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031428": {
+          "USER": "Sam",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1327",
+          "ENDTIME": "1327",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": "New job"
+        }
+      }
+    },
+    "77231": {
+      "SOP": 77231,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031315": {
+          "USER": "Bill",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1214",
+          "ENDTIME": "1214",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "Urgent"
+        }
+      }
+    },
     "77777": {
       "SOP": 77777,
-      "WRITTEN-UP": true,
+      "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": true,
       "FACTORY-COMPLETE": false,
-      "DISPATCH": "none",
+      "DISPATCH": null,
       "LOGS": {
         "202503241000": {
           "USER": "Bob",
@@ -179,10 +285,10 @@
     },
     "78451": {
       "SOP": 78451,
-      "WRITTEN-UP": true,
+      "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
-      "DISPATCH": "none",
+      "DISPATCH": null,
       "LOGS": {
         "202503290806": {
           "USER": "SAMB",
@@ -208,10 +314,10 @@
     },
     "88888": {
       "SOP": 88888,
-      "WRITTEN-UP": true,
+      "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
-      "DISPATCH": "none",
+      "DISPATCH": null,
       "LOGS": {
         "202503241200": {
           "USER": "Bob",
@@ -219,6 +325,16 @@
           "LINE": null,
           "STARTTIME": 1200,
           "ENDTIME": 1200,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504031226": {
+          "USER": "Sam",
+          "AREA": "HAND-TOOLS - DET",
+          "LINE": "2",
+          "STARTTIME": "1125",
+          "ENDTIME": "1125",
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
