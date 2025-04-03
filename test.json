@@ -203,23 +203,36 @@
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
-        "202504041320": {
-          "USER": "BOB",
+        "202504041545": {
+          "DATE": "3/4/2025 14:40",
+          "USER": "SAM",
           "AREA": "Office - ",
           "LINE": null,
-          "STARTTIME": "1219",
-          "ENDTIME": "1219",
+          "STARTTIME": "1444",
+          "ENDTIME": "1444",
           "DURATION": null,
           "STATUS": "COMPLETE",
-          "NOTES": ""
+          "NOTES": "TEST DATE"
         },
-        "202504041321": {
-          "USER": "FRANK",
-          "AREA": "WALL-SAW - FIRE-DOORS",
+        "202504031445": {
+          "DATE": "3/4/2025 14:45",
+          "USER": "JIM",
+          "AREA": "SANDER - FIRE-DOORS",
           "LINE": "1",
-          "STARTTIME": "1220",
-          "ENDTIME": "1330",
-          "DURATION": 110,
+          "STARTTIME": "1445",
+          "ENDTIME": "1445",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": "Test scan time"
+        },
+        "202504031447": {
+          "DATE": "3/4/2025 14:50",
+          "USER": "SCAN",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "2",
+          "STARTTIME": "1447",
+          "ENDTIME": "1447",
+          "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
         }

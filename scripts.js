@@ -19,7 +19,14 @@ function populateData(){
     const order = jsonData.orders[orderId];
     
     const row = document.createElement('tr');
+
+    // //lastdate up cell
+    // const dateCell = document.createElement('td');
+    // dateCell.textContent = order.DATE;
+    // row.appendChild(dateCell);
     
+
+
     //SOP cell
     const sopCell = document.createElement('td');
     const sopLink = document.createElement('a');
@@ -47,11 +54,26 @@ function populateData(){
     const locationCell = document.createElement('td');
     locationCell.textContent = "-";
     if (order.LOGS && Object.keys(order.LOGS).length > 0){
-      let last = Object.keys(order.LOGS).sort().pop();
+      let last = Object.keys(order.LOGS).sort().shift();
       locationCell.textContent = order.LOGS[last].AREA;
     }
     row.appendChild(locationCell);
 
+    //Last date
+    const dateCell = document.createElement('td');
+    dateCell.textContent = "-";
+    if (order.LOGS && Object.keys(order.LOGS).length > 0){
+      let last = Object.keys(order.LOGS).sort().shift();
+      
+      if(order.LOGS[last].DATE){
+        dateCell.textContent = order.LOGS[last].DATE;
+
+      }
+      
+    }
+
+    row.appendChild(dateCell);
+    
     //dispatch cell
     const dispatchCell = document.createElement('td');
     dispatchCell.textContent = order.DISPATCH;
@@ -77,7 +99,11 @@ function displayOrderDetails(){
     for(const logId in order.LOGS){
       const row = document.createElement('tr');
       const log = order.LOGS[logId];
-      //user cell
+      //date cell
+      const dateCell = document.createElement('td');
+      dateCell.textContent = log.DATE;
+      row.appendChild(dateCell)
+;      //user cell
       const userCell = document.createElement('td');
       userCell.textContent = log.USER;
       row.appendChild(userCell);
@@ -211,11 +237,16 @@ if (window.location.pathname.includes('Scan.html')) {
               const timestamp = 
               now.getFullYear().toString() + 
               String(now.getMonth() + 1).padStart(2, '0') + 
-              String(now.getDate() + 1).padStart(2, '0') + 
-              String(now.getHours() + 1).padStart(2, '0') + 
-              String(now.getMinutes() + 1).padStart(2, '0');
-              
+              String(now.getDate()).padStart(2, '0') + 
+              String(now.getHours()).padStart(2, '0') + 
+              String(now.getMinutes() ).padStart(2, '0');
+              const date = now.getDate().toString() + '/' + String(now.getMonth() + 1) + '/' + String(now.getFullYear()) + ' ' + String(now.getHours()).padStart(2, '0') + ':' +
+              String(now.getMinutes() ).padStart(2, '0');
+
+
+
               const newLog = {
+                "DATE": date,
                 "USER":user,
                 "AREA":subArea + ' - ' + area,
                 "LINE":lineSelect,
@@ -237,18 +268,6 @@ if (window.location.pathname.includes('Scan.html')) {
               return;
           }
 
-          // -----------------------------------
-          // Move new order to 'admin' dashboard
-          // -----------------------------------
-          // Create new order matching existing structure
-          // jsonData.orders[sop] = {
-          //     SOP: parseInt(sop),
-          //     'WRITTEN-UP': false,
-          //     'ISSUED-TO-FACTORY': false,
-          //     'FACTORY-COMPLETE': false,
-          //     'DISPATCH': null,
-          //     'LOGS': {}
-          // };
 
           showMessage(`Order ${sop} not in system`);
 
