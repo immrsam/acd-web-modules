@@ -114,6 +114,16 @@
           "DURATION": null,
           "STATUS": "WRITTEN-UP",
           "NOTES": "afds"
+        },
+        "202504031446": {
+          "USER": "Sam",
+          "AREA": "ISSUED-FACTORY - OFFICE",
+          "LINE": "0",
+          "STARTTIME": "1345",
+          "ENDTIME": "1345",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
         }
       }
     },
@@ -186,6 +196,35 @@
         }
       }
     },
+    "72121": {
+      "SOP": 72121,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504041320": {
+          "USER": "BOB",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1219",
+          "ENDTIME": "1219",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504041321": {
+          "USER": "FRANK",
+          "AREA": "WALL-SAW - FIRE-DOORS",
+          "LINE": "1",
+          "STARTTIME": "1220",
+          "ENDTIME": "1330",
+          "DURATION": 110,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
     "72345": {
       "SOP": 72345,
       "WRITTEN-UP": "No",
@@ -221,6 +260,55 @@
           "DURATION": null,
           "STATUS": "WRITTEN-UP",
           "NOTES": "Urgent"
+        }
+      }
+    },
+    "77722": {
+      "SOP": 77722,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504041201": {
+          "USER": "SAM",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1100",
+          "ENDTIME": "1100",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": "First test"
+        },
+        "202504041202": {
+          "USER": "Sam",
+          "AREA": "ISSUED-FACTORY - OFFICE",
+          "LINE": "1",
+          "STARTTIME": "1",
+          "ENDTIME": "1",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504041203": {
+          "USER": "Sam",
+          "AREA": "HAND-TOOLS - FIRE-DOORS",
+          "LINE": "1",
+          "STARTTIME": "1100",
+          "ENDTIME": "1102",
+          "DURATION": 2,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504041205": {
+          "USER": "Bob",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "0",
+          "STARTTIME": "1104",
+          "ENDTIME": "1200",
+          "DURATION": 96,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
         }
       }
     },
@@ -278,6 +366,26 @@
           "STARTTIME": 1450,
           "ENDTIME": 1520,
           "DURATION": 30,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504031528": {
+          "USER": "Gil",
+          "AREA": "UPCUT-SAW - NON-RATED",
+          "LINE": "2",
+          "STARTTIME": "1027",
+          "ENDTIME": "1427",
+          "DURATION": 400,
+          "STATUS": "COMPLETE",
+          "NOTES": "Recut"
+        },
+        "202504031529": {
+          "USER": "Sam",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "0",
+          "STARTTIME": "1202",
+          "ENDTIME": "1203",
+          "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
         }

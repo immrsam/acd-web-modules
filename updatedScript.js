@@ -20,7 +20,6 @@ function populateData(){
     
     const row = document.createElement('tr');
     
-    //SOP cell
     const sopCell = document.createElement('td');
     const sopLink = document.createElement('a');
     sopLink.href = `results.html?sop=${order.SOP}`;
@@ -28,22 +27,18 @@ function populateData(){
     sopCell.appendChild(sopLink);
     row.appendChild(sopCell);
     
-    //written up cell
     const writtenUpCell = document.createElement('td');
     writtenUpCell.textContent = order['WRITTEN-UP'] ? 'Yes' : 'No';
     row.appendChild(writtenUpCell);
     
-    //factory issued cell
     const factoryIssuedCell = document.createElement('td');
     factoryIssuedCell.textContent = order['ISSUED-TO-FACTORY'] ? 'Yes' : 'No';
     row.appendChild(factoryIssuedCell);
     
-    //factory issued cell
     const factoryCompleteCell = document.createElement('td');
     factoryCompleteCell.textContent = order['FACTORY-COMPLETE'] ? 'Yes' : 'No';
     row.appendChild(factoryCompleteCell);
     
-    //Last location
     const locationCell = document.createElement('td');
     locationCell.textContent = "-";
     if (order.LOGS && Object.keys(order.LOGS).length > 0){
@@ -52,7 +47,6 @@ function populateData(){
     }
     row.appendChild(locationCell);
 
-    //dispatch cell
     const dispatchCell = document.createElement('td');
     dispatchCell.textContent = order.DISPATCH;
     row.appendChild(dispatchCell);
@@ -77,35 +71,35 @@ function displayOrderDetails(){
     for(const logId in order.LOGS){
       const row = document.createElement('tr');
       const log = order.LOGS[logId];
-      //user cell
+      
       const userCell = document.createElement('td');
       userCell.textContent = log.USER;
       row.appendChild(userCell);
-      //area cell
+      
       const areaCell = document.createElement('td');
       areaCell.textContent = log.AREA;
       row.appendChild(areaCell);
-      //line cell
+      
       const lineCell = document.createElement('td');
       lineCell.textContent = log.LINE;
       row.appendChild(lineCell);
-      //starttime cell
+      
       const startTimeCell = document.createElement('td');
       startTimeCell.textContent = log.STARTTIME;
       row.appendChild(startTimeCell);
-      //endtime cell
+      
       const endTimeCell = document.createElement('td');
       endTimeCell.textContent = log.ENDTIME;
       row.appendChild(endTimeCell);
-      //duration cell
+      
       const durationCell = document.createElement('td');
       durationCell.textContent = log.DURATION;
       row.appendChild(durationCell);
-      //status cell
+      
       const statusCell = document.createElement('td');
       statusCell.textContent = log.STATUS;
       row.appendChild(statusCell);
-      //notes cell
+      
       const notesCell = document.createElement('td');
       notesCell.textContent = log.NOTES;
       row.appendChild(notesCell);
@@ -155,22 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })
 
-// ---------------------------------------------------------------------//
-//                              SCAN PAGE SCRIPTS                       //
-// ---------------------------------------------------------------------//
-
-//--------------------------------------------------------//
-// LOCAL SAVE ONLY FOR TESTING AND DEMONSTRATING PURPOSES //
-//--------------------------------------------------------//
-function startTime(){
-  const startTime = document.getElementById('startTimeInput').innerHTML = getCurrentTime();
-  console.log(getCurrentTime());
-  
-}
-function endTime(){
-  const endTime = document.getElementById('endTime').innerHTML = getCurrentTime();
-}
-
+// SCAN PAGE SCRIPTS
 if (window.location.pathname.includes('Scan.html')) {
   console.log("Scan loaded");
   
@@ -178,13 +157,11 @@ if (window.location.pathname.includes('Scan.html')) {
   const exportBtn = document.getElementById('exportBtn');
   const messageDiv = document.getElementById('messageDiv');
 
-  // Load existing data if available
   if (!jsonData) {
       jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
       console.log(jsonData);      
   }
 
-  // Order form handler
   if (orderForm) {
       orderForm.addEventListener('submit', function(e) {
           e.preventDefault();
@@ -198,15 +175,12 @@ if (window.location.pathname.includes('Scan.html')) {
           const notes = document.getElementById('notesInput').value.trim();           
           const statusInput = document.getElementById('statusInput').value.trim();           
 
-
           if (!sop) {
               showMessage('Please enter a valid SOP');
               return;
           }
 
           if (jsonData.orders[sop]) {
-              // showMessage(`Order ${sop} already exists`);
-              
               const now = new Date();
               const timestamp = 
               now.getFullYear().toString() + 
@@ -237,25 +211,10 @@ if (window.location.pathname.includes('Scan.html')) {
               return;
           }
 
-          // -----------------------------------
-          // Move new order to 'admin' dashboard
-          // -----------------------------------
-          // Create new order matching existing structure
-          // jsonData.orders[sop] = {
-          //     SOP: parseInt(sop),
-          //     'WRITTEN-UP': false,
-          //     'ISSUED-TO-FACTORY': false,
-          //     'FACTORY-COMPLETE': false,
-          //     'DISPATCH': null,
-          //     'LOGS': {}
-          // };
-
           showMessage(`Order ${sop} not in system`);
-
       });
   }
 
-  // Export handler
   if (exportBtn) {
       exportBtn.addEventListener('click', function() {
           const dataStr = JSON.stringify(jsonData, null, 2);
@@ -275,15 +234,13 @@ if (window.location.pathname.includes('Scan.html')) {
       });
   }
 
-  // Helper function
   function showMessage(text) {
       if (!messageDiv) return;
       messageDiv.textContent = text;
   }
 }
-// ----------------
-// NEW JOB
-// ----------------
+
+// NEW JOB PAGE
 if (window.location.pathname.includes('newJob.html')) {
   console.log("New Job Loaded");
   
@@ -291,13 +248,11 @@ if (window.location.pathname.includes('newJob.html')) {
   const exportBtn = document.getElementById('exportBtn');
   const messageDiv = document.getElementById('messageDiv');
 
-  // Load existing data if available
   if (!jsonData) {
       jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
       console.log(jsonData);      
   }
 
-  // Order form handler
   if (orderForm) {
     console.log("STARTED ORDERFORM");
     
@@ -315,8 +270,6 @@ if (window.location.pathname.includes('newJob.html')) {
           }
 
           if (!jsonData.orders[sop]) {
-              // showMessage(`Order ${sop} already exists`);
-              
               const now = new Date();
               const timestamp = 
               now.getFullYear().toString() + 
@@ -325,7 +278,6 @@ if (window.location.pathname.includes('newJob.html')) {
               String(now.getHours() + 1).padStart(2, '0') + 
               String(now.getMinutes() + 1).padStart(2, '0');
               
-              // Create new order matching existing structure
               jsonData.orders[sop] = {
                   SOP: parseInt(sop),
                   'WRITTEN-UP': writtenUp ? "Yes" : "No",
@@ -359,48 +311,11 @@ if (window.location.pathname.includes('newJob.html')) {
               return;
           }
 
-        
-
           showMessage(`Order ${sop} already in system`);
           console.log(`Order ${sop} already in system`);
-          
-          // localStorage.setItem('orderData', JSON.stringify(jsonData));
-          // orderForm.reset();
       });
   }
 
-  // function addNewLog(jsonData, sopNumber, user, area, subArea, notes = " "){
-  //   const now = new Date();
-  //   const timestamp = 
-  //   now.getFullYear().toString() + 
-  //   String(now.getMonth() + 1).padStart(2, '0') + 
-  //   String(now.getDate() + 1).padStart(2, '0') + 
-  //   String(now.getHours() + 1).padStart(2, '0') + 
-  //   String(now.getMinutes() + 1).padStart(2, '0');
-    
-  //   const newLog = {
-  //     "USER":user,
-  //     "AREA":subArea + ' - ' + area,
-  //     "LINE":null,
-  //     "STARTTIME":1200,
-  //     "ENDTIME":1400,
-  //     "DURATION":120,
-  //     "STATUS":"COMPLETE",
-  //     "NOTES":notes
-  //   }
-
-  //   console.log(newLog);
-    
-
-  //   if(!jsonData.orders[sopNumber].LOGS){
-  //     jsonData.orders[sopNumber].LOGS[timestamp] = newLog;
-
-  //   }
-    
-  //   return newLog;
-  // }
-
-  // Export handler
   if (exportBtn) {
       exportBtn.addEventListener('click', function() {
           const dataStr = JSON.stringify(jsonData, null, 2);
@@ -420,17 +335,11 @@ if (window.location.pathname.includes('newJob.html')) {
       });
   }
 
-  // Helper function
   function showMessage(text) {
       if (!messageDiv) return;
       messageDiv.textContent = text;
   }
 }
-
-
-// -----------------
-// Datalist populate
-// -----------------
 
 const locationOptions = {
     "OFFICE":["WRITTEN-UP", "ISSUED-FACTORY","FACTORY-COMPLETE"],
@@ -439,7 +348,7 @@ const locationOptions = {
     "FACTORY-8":["CNC", "EDGE-RUNNER","HAND-TOOLS", "UPCUT-SAW"],
     "NON-RATED":["BEAM-SAW","WALL-SAW","PANEL-SAW","COLD-PRESS","UPCUT-SAW","FRAMING","HAND-TOOLS"],
     "DESPATCH":["WRAPPED","SENT"]
-  }
+}
 
 function updateOptions() {
   const locationInput = document.getElementById('location');
@@ -469,10 +378,6 @@ function updateOptions() {
   }  
 }
 
-
-// -----------------
-// Timer
-// -----------------
 function getCurrentTime(){
   const now = new Date();
   const timestamp = 
@@ -489,9 +394,7 @@ function getDuration(start, end){
   return result;
 }
 
-// Chack if page is on Scan.html
 if(window.location.pathname.includes('Scan.html')) {
-  // BASIC TIMER 
   let timerStarted = false;
   let startTime = ""
   let endTime = ""
@@ -509,11 +412,5 @@ if(window.location.pathname.includes('Scan.html')) {
     }
     endTime = getCurrentTime();
     document.getElementById('endTimeInput').value = endTime;
-    
-    // document.getElementById('duration').innerHTML = getDuration(startTime, endTime);
   })
-
-
-
 }
-

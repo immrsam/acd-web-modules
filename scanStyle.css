@@ -26,7 +26,7 @@ h1 {
   color: white;
   font-weight: 700;
   padding: .5em 2em;
-  border-radius: 10px;
+  border-radius: 5px;
   letter-spacing: .1rem;
   margin: .1rem;
   min-width: 110px;
@@ -65,6 +65,19 @@ h1 {
     word-wrap: break-word;
     hyphens: auto;
     text-align: right;
+}
+
+.fw{
+    width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    text-align: center;
+}
+
+#messageDiv{
+font-size: small;
+font-weight: 700;
 }
 
 header {
