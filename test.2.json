@@ -1,0 +1,477 @@
+{
+  "orders": {
+    "11223": {
+      "SOP": 11223,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031317": {
+          "USER": "Frank",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1216",
+          "ENDTIME": "1216",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "in place before write up"
+        }
+      }
+    },
+    "12345": {
+      "SOP": 12345,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202503290808": {
+          "USER": "SAMB",
+          "AREA": "Written Up - Office",
+          "LINE": null,
+          "STARTTIME": 1200,
+          "ENDTIME": 1400,
+          "DURATION": 120,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503290809": {
+          "USER": "SAMB",
+          "AREA": "Beam Saw - Fire Doors",
+          "LINE": null,
+          "STARTTIME": 1200,
+          "ENDTIME": 1400,
+          "DURATION": 120,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503291119": {
+          "USER": "BOB",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": null,
+          "STARTTIME": "1111",
+          "ENDTIME": "1212",
+          "DURATION": 101,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504021110": {
+          "USER": "SAM",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": null,
+          "STARTTIME": "1008",
+          "ENDTIME": "1009",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504021301": {
+          "USER": "Frank",
+          "AREA": "EDGE-RUNNER - FACTORY-8",
+          "LINE": null,
+          "STARTTIME": "1159",
+          "ENDTIME": "1200",
+          "DURATION": 41,
+          "STATUS": "COMPLETE",
+          "NOTES": "New note.\nNew line."
+        },
+        "202504021307": {
+          "USER": "Frank",
+          "AREA": "WALL-SAW - FIRE-DOORS",
+          "LINE": null,
+          "STARTTIME": "1204",
+          "ENDTIME": "1206",
+          "DURATION": 2,
+          "STATUS": "COMPLETE",
+          "NOTES": "Fixed"
+        },
+        "202504031214": {
+          "USER": "Bill",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": null,
+          "STARTTIME": "1113",
+          "ENDTIME": "1113",
+          "DURATION": 1,
+          "STATUS": "WIP",
+          "NOTES": "machine issue"
+        }
+      }
+    },
+    "55442": {
+      "SOP": 55442,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031315": {
+          "USER": "qwer",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1214",
+          "ENDTIME": "1214",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "afds"
+        },
+        "202504031446": {
+          "USER": "Sam",
+          "AREA": "ISSUED-FACTORY - OFFICE",
+          "LINE": "0",
+          "STARTTIME": "1345",
+          "ENDTIME": "1345",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "65321": {
+      "SOP": 65321,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": true,
+      "FACTORY-COMPLETE": true,
+      "DISPATCH": "SENT",
+      "LOGS": {
+        "202503241000": {
+          "USER": "Bob",
+          "AREA": "WRITE-UP",
+          "LINE": null,
+          "STARTTIME": 1000,
+          "ENDTIME": 1000,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241001": {
+          "USER": "Bob",
+          "AREA": "ISSUED-TO-FACTORY",
+          "LINE": null,
+          "STARTTIME": 1001,
+          "ENDTIME": 1001,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241122": {
+          "USER": "Smith",
+          "AREA": "BEAMSAW",
+          "LINE": 1,
+          "STARTTIME": 1030,
+          "ENDTIME": 1122,
+          "DURATION": 52,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241309": {
+          "USER": "Bill",
+          "AREA": "DET",
+          "LINE": 1,
+          "STARTTIME": 1300,
+          "ENDTIME": 1315,
+          "DURATION": 15,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241520": {
+          "USER": "Frank",
+          "AREA": "FINISHING",
+          "LINE": 1,
+          "STARTTIME": 1450,
+          "ENDTIME": 1520,
+          "DURATION": 30,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503250930": {
+          "USER": "Tom",
+          "AREA": "DISPATCH",
+          "LINE": 1,
+          "STARTTIME": 930,
+          "ENDTIME": 930,
+          "DURATION": 1,
+          "STATUS": "SENT",
+          "NOTES": ""
+        }
+      }
+    },
+    "72121": {
+      "SOP": 72121,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504041545": {
+          "DATE": "3/4/2025 14:40",
+          "USER": "SAM",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1444",
+          "ENDTIME": "1444",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": "TEST DATE"
+        },
+        "202504031445": {
+          "DATE": "3/4/2025 14:45",
+          "USER": "JIM",
+          "AREA": "SANDER - FIRE-DOORS",
+          "LINE": "1",
+          "STARTTIME": "1445",
+          "ENDTIME": "1445",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": "Test scan time"
+        },
+        "202504031447": {
+          "DATE": "3/4/2025 14:50",
+          "USER": "SCAN",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "2",
+          "STARTTIME": "1447",
+          "ENDTIME": "1447",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "72345": {
+      "SOP": 72345,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031428": {
+          "USER": "Sam",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1327",
+          "ENDTIME": "1327",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": "New job"
+        }
+      }
+    },
+    "77231": {
+      "SOP": 77231,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504031315": {
+          "USER": "Bill",
+          "AREA": "Office",
+          "LINE": null,
+          "STARTTIME": "1214",
+          "ENDTIME": "1214",
+          "DURATION": null,
+          "STATUS": "WRITTEN-UP",
+          "NOTES": "Urgent"
+        },
+        "202504070712": {
+          "DATE": "7/4/2025 07:12",
+          "USER": "Sam",
+          "AREA": "DET-MACHINE - DET",
+          "LINE": "2",
+          "STARTTIME": "0712",
+          "ENDTIME": "0712",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "77722": {
+      "SOP": 77722,
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504041201": {
+          "USER": "SAM",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1100",
+          "ENDTIME": "1100",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": "First test"
+        },
+        "202504041202": {
+          "USER": "Sam",
+          "AREA": "ISSUED-FACTORY - OFFICE",
+          "LINE": "1",
+          "STARTTIME": "1",
+          "ENDTIME": "1",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504041203": {
+          "USER": "Sam",
+          "AREA": "HAND-TOOLS - FIRE-DOORS",
+          "LINE": "1",
+          "STARTTIME": "1100",
+          "ENDTIME": "1102",
+          "DURATION": 2,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504041205": {
+          "USER": "Bob",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "0",
+          "STARTTIME": "1104",
+          "ENDTIME": "1200",
+          "DURATION": 96,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "77777": {
+      "SOP": 77777,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": true,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202503241000": {
+          "USER": "Bob",
+          "AREA": "WRITE-UP",
+          "LINE": null,
+          "STARTTIME": 1000,
+          "ENDTIME": 1000,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241001": {
+          "USER": "Bob",
+          "AREA": "ISSUED-TO-FACTORY",
+          "LINE": null,
+          "STARTTIME": 1001,
+          "ENDTIME": 1001,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241122": {
+          "USER": "Smith",
+          "AREA": "BEAMSAW",
+          "LINE": 1,
+          "STARTTIME": 1030,
+          "ENDTIME": 1122,
+          "DURATION": 52,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503241309": {
+          "USER": "Bill",
+          "AREA": "DET",
+          "LINE": 1,
+          "STARTTIME": 1300,
+          "ENDTIME": 1309,
+          "DURATION": 9,
+          "STATUS": "WIP",
+          "NOTES": "change blade"
+        },
+        "202503241520": {
+          "USER": "Frank",
+          "AREA": "DET",
+          "LINE": 1,
+          "STARTTIME": 1450,
+          "ENDTIME": 1520,
+          "DURATION": 30,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504031528": {
+          "USER": "Gil",
+          "AREA": "UPCUT-SAW - NON-RATED",
+          "LINE": "2",
+          "STARTTIME": "1027",
+          "ENDTIME": "1427",
+          "DURATION": 400,
+          "STATUS": "COMPLETE",
+          "NOTES": "Recut"
+        },
+        "202504031529": {
+          "USER": "Sam",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "0",
+          "STARTTIME": "1202",
+          "ENDTIME": "1203",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "78451": {
+      "SOP": 78451,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202503290806": {
+          "USER": "SAMB",
+          "AREA": "Written Up - Office",
+          "LINE": null,
+          "STARTTIME": 1200,
+          "ENDTIME": 1400,
+          "DURATION": 120,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202503291127": {
+          "USER": "SAM",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": null,
+          "STARTTIME": "1026",
+          "ENDTIME": "1026",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "88888": {
+      "SOP": 88888,
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202503241200": {
+          "USER": "Bob",
+          "AREA": "WRITE-UP",
+          "LINE": null,
+          "STARTTIME": 1200,
+          "ENDTIME": 1200,
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504031226": {
+          "USER": "Sam",
+          "AREA": "HAND-TOOLS - DET",
+          "LINE": "2",
+          "STARTTIME": "1125",
+          "ENDTIME": "1125",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    }
+  }
+}
