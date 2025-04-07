@@ -170,6 +170,28 @@
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
+        },
+        "202504071126": {
+          "DATE": "07/04/2025 11:26",
+          "USER": "BOB",
+          "AREA": "WRAPPED - DESPATCH",
+          "LINE": "2",
+          "STARTTIME": "1126",
+          "ENDTIME": "1126",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504071253": {
+          "DATE": "07/04/2025 12:53",
+          "USER": "FRANK",
+          "AREA": "ISSUED-FACTORY - OFFICE",
+          "LINE": "1",
+          "STARTTIME": "1220",
+          "ENDTIME": "1253",
+          "DURATION": 33,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
         }
       }
     }
