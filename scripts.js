@@ -95,13 +95,15 @@ function setupScanPage() {
             const endTime = document.getElementById('endTimeInput').value.trim();
             const notes = document.getElementById('notesInput').value.trim();
             const statusInput = document.getElementById('statusInput').value.trim();
-
+            const rating = document.getElementById('ratingSelect').value.trim(); // Add this input
+    
             if (!sop) {
                 showMessage('Please enter a valid SOP');
                 return;
             }
-
-            if (jsonData.orders[sop]) {
+    
+            const orderKey = `${sop}-${rating}`; // Use SOP + RATING as key
+            if (jsonData.orders[orderKey]) {
                 const now = new Date();
                 const timestamp = now.getFullYear().toString() + 
                     String(now.getMonth() + 1).padStart(2, '0') + 
@@ -114,11 +116,11 @@ function setupScanPage() {
                     now.getFullYear() + ' ' + 
                     String(now.getHours()).padStart(2, '0') + ':' +
                     String(now.getMinutes()).padStart(2, '0');
-
+    
                 const newLog = {
                     "DATE": date,
                     "USER": user,
-                    "AREA": subArea + ' - ' + area,
+                    "AREA": area + ' - ' + subArea,
                     "LINE": lineSelect,
                     "STARTTIME": startTime,
                     "ENDTIME": endTime,
@@ -126,15 +128,15 @@ function setupScanPage() {
                     "STATUS": statusInput,
                     "NOTES": notes
                 };
-
-                jsonData.orders[sop].LOGS[timestamp] = newLog;
+    
+                jsonData.orders[orderKey].LOGS[timestamp] = newLog;
                 localStorage.setItem('orderData', JSON.stringify(jsonData));
-                showMessage(`Order ${sop} updated successfully!`);
+                showMessage(`Order ${sop} (${rating}) updated successfully!`);
                 orderForm.reset();
                 return;
             }
-
-            showMessage(`Order ${sop} not in system`);
+    
+            showMessage(`Order ${sop} (${rating}) not in system`);
         });
     }
 
@@ -189,18 +191,24 @@ function populateData() {
 
   tableBody.innerHTML = '';
 
-  for (const orderId in jsonData.orders) {
-      const order = jsonData.orders[orderId];
-      const row = document.createElement('tr');
+  for (const orderKey in jsonData.orders) {
+    const order = jsonData.orders[orderKey];
+    const row = document.createElement('tr');
 
-      // SOP Cell (unchanged)
+      // SOP Cell
       const sopCell = document.createElement('td');
       const sopLink = document.createElement('a');
-      sopLink.href = `results.html?sop=${order.SOP}`;
+      sopLink.href = `results.html?sop=${order.SOP}&rating=${order.RATING}`; // Pass both SOP & RATING
       sopLink.textContent = order.SOP;
       sopCell.appendChild(sopLink);
       row.appendChild(sopCell);
       
+      // RATING Cell
+      const ratingCell = document.createElement('td');
+      ratingCell.textContent = order.RATING;
+      row.appendChild(ratingCell);
+
+
       // Status Cells (unchanged)
       row.appendChild(createStatusCell(order['WRITTEN-UP']));
       row.appendChild(createStatusCell(order['ISSUED-TO-FACTORY']));
@@ -294,31 +302,99 @@ function setupSearch() {
 // ORDER DETAILS PAGE
 // ======================
 function displayOrderDetails() {
+    // Exit if not on the results page
     if (!window.location.pathname.includes('results.html')) return;
     
+    // Get SOP and RATING from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const sop = urlParams.get('sop');
-    const order = jsonData.orders[sop];
+    const rating = urlParams.get('rating');
     
-    document.getElementById('sop-number').textContent = `SOP: ${order.SOP}`;
+    // Validate required parameters
+    if (!sop || !rating) {
+        document.getElementById('sop-number').textContent = 'Missing SOP or RATING in URL';
+        return;
+    }
+    
+    // Construct the unique order key (SOP-RATING)
+    const orderKey = `${sop}-${rating}`;
+    const order = jsonData.orders[orderKey];
+    
+    // Handle case where order doesn't exist
+    if (!order) {
+        document.getElementById('sop-number').textContent = `Order ${sop} (${rating}) not found!`;
+        return;
+    }
+    
+    // Update the header with SOP and RATING
+    document.getElementById('sop-number').textContent = `SOP: ${order.SOP} (${order.RATING})`;
+    
+    // Clear existing table data
     const tableBody = document.querySelector('#logTable tbody');
     tableBody.innerHTML = '';
     
+    // Check if logs exist
     if (order.LOGS && Object.keys(order.LOGS).length > 0) {
-        for (const logId in order.LOGS) {
-            const log = order.LOGS[logId];
+        // Convert logs to an array and sort by DATE (newest first)
+        const logEntries = Object.entries(order.LOGS);
+        
+        logEntries.sort((a, b) => {
+            const dateA = parseLogDate(a[1].DATE);
+            const dateB = parseLogDate(b[1].DATE);
+            return dateB - dateA; // Newest first
+        });
+        
+        // Populate the table with log data
+        logEntries.forEach(([logId, log]) => {
             const row = document.createElement('tr');
             
-            // Create cells for each log property
-            ['DATE', 'USER', 'AREA', 'LINE', 'STARTTIME', 'ENDTIME', 'DURATION', 'STATUS', 'NOTES'].forEach(prop => {
+            // Define the properties to display (in order)
+            const properties = [
+                'DATE',
+                'USER',
+                'AREA',
+                'LINE',
+                'STARTTIME',
+                'ENDTIME',
+                'DURATION',
+                'STATUS',
+                'NOTES'
+            ];
+            
+            // Create a cell for each property
+            properties.forEach(prop => {
                 const cell = document.createElement('td');
-                cell.textContent = log[prop] || "-";
+                cell.textContent = log[prop] || "-"; // Show "-" if empty
                 row.appendChild(cell);
             });
             
             tableBody.appendChild(row);
-        }
+        });
+    } else {
+        // Show a "No logs" message if none exist
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.setAttribute('colspan', '9');
+        cell.textContent = 'No logs available for this order.';
+        row.appendChild(cell);
+        tableBody.appendChild(row);
     }
+}
+
+// Helper function to parse date strings (DD/MM/YYYY HH:MM)
+function parseLogDate(dateString) {
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const [hours, minutes] = timePart.split(':');
+    
+    // Return a Date object (months are 0-indexed)
+    return new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hours),
+        parseInt(minutes)
+    );
 }
 
 // ======================
@@ -340,13 +416,19 @@ function setupNewJobPage() {
             const user = document.getElementById('user').value.trim();
             const writtenUp = document.getElementById('writtenUp').checked;
             const notes = document.getElementById('notesInput').value.trim();
-            
+            const rating = document.getElementById('ratingSelect').value.trim(); // Assuming a <select> for FIRE/FLUSH
+    
             if (!sop) {
                 showMessage('Please enter a valid SOP');
                 return;
             }
-
-            if (!jsonData.orders[sop]) {
+    
+            // Check if an order with this SOP + RATING already exists
+            const existingOrder = Object.values(jsonData.orders).find(
+                order => order.SOP == sop && order.RATING === rating
+            );
+    
+            if (!existingOrder) {
                 const now = new Date();
                 const timestamp = now.getFullYear().toString() + 
                     String(now.getMonth() + 1).padStart(2, '0') + 
@@ -359,16 +441,17 @@ function setupNewJobPage() {
                     now.getFullYear() + ' ' + 
                     String(now.getHours()).padStart(2, '0') + ':' +
                     String(now.getMinutes()).padStart(2, '0');
-
-                jsonData.orders[sop] = {
+    
+                jsonData.orders[`${sop}-${rating}`] = {  // Use SOP-RATING as key for uniqueness
                     SOP: parseInt(sop),
+                    RATING: rating,  // Store the rating
                     'WRITTEN-UP': writtenUp ? "Yes" : "No",
                     'ISSUED-TO-FACTORY': false,
                     'FACTORY-COMPLETE': false,
                     'DISPATCH': null,
                     'LOGS': {}
                 };
-
+    
                 const newLog = {
                     "DATE": date,
                     "USER": user,
@@ -380,13 +463,13 @@ function setupNewJobPage() {
                     "STATUS": "COMPLETE",
                     "NOTES": notes
                 };
-
-                jsonData.orders[sop].LOGS[timestamp] = newLog;
+    
+                jsonData.orders[`${sop}-${rating}`].LOGS[timestamp] = newLog;
                 localStorage.setItem('orderData', JSON.stringify(jsonData));
-                showMessage(`Order ${sop} created successfully!`);
+                showMessage(`Order ${sop} (${rating}) created successfully!`);
                 orderForm.reset();
             } else {
-                showMessage(`Order ${sop} already in system`);
+                showMessage(`Order ${sop} (${rating}) already exists!`);
             }
         });
     }

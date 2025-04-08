@@ -1,195 +1,160 @@
 {
   "orders": {
-    "12345": {
+    "12345-FIRE": {
       "SOP": 12345,
+      "RATING": "FIRE",
       "WRITTEN-UP": "No",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
-        "202504070852": {
-          "DATE": "07/04/2025 08:52",
+        "202504081406": {
+          "DATE": "08/04/2025 14:06",
           "USER": "Sam",
-          "AREA": "ISSUED-FACTORY - OFFICE",
-          "LINE": "1",
-          "STARTTIME": "0852",
-          "ENDTIME": "0852",
-          "DURATION": 1,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        }
-      }
-    },
-    "22113": {
-      "SOP": 22113,
-      "WRITTEN-UP": "No",
-      "ISSUED-TO-FACTORY": false,
-      "FACTORY-COMPLETE": false,
-      "DISPATCH": null,
-      "LOGS": {
-        "202504080913": {
-          "DATE": "7/4/2025 08:12",
-          "USER": "SAM",
           "AREA": "Office - ",
           "LINE": null,
-          "STARTTIME": "0812",
-          "ENDTIME": "0812",
-          "DURATION": null,
+          "STARTTIME": "1406",
+          "ENDTIME": "1406",
+          "DURATION": 0,
           "STATUS": "COMPLETE",
-          "NOTES": ""
+          "NOTES": "First"
         }
       }
     },
-    "32123": {
-      "SOP": 32123,
-      "WRITTEN-UP": "No",
-      "ISSUED-TO-FACTORY": false,
-      "FACTORY-COMPLETE": false,
-      "DISPATCH": null,
-      "LOGS": {
-        "202504080911": {
-          "DATE": "7/4/2025 08:10",
-          "USER": "SAM",
-          "AREA": "Office - ",
-          "LINE": null,
-          "STARTTIME": "0810",
-          "ENDTIME": "0810",
-          "DURATION": null,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        }
-      }
-    },
-    "32199": {
-      "SOP": 32199,
-      "WRITTEN-UP": "No",
-      "ISSUED-TO-FACTORY": false,
-      "FACTORY-COMPLETE": false,
-      "DISPATCH": null,
-      "LOGS": {
-        "202504080916": {
-          "DATE": "7/4/2025 08:15",
-          "USER": "NNas",
-          "AREA": "Office - ",
-          "LINE": null,
-          "STARTTIME": "0815",
-          "ENDTIME": "0815",
-          "DURATION": null,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        }
-      }
-    },
-    "32323": {
-      "SOP": 32323,
-      "WRITTEN-UP": "No",
-      "ISSUED-TO-FACTORY": false,
-      "FACTORY-COMPLETE": false,
-      "DISPATCH": null,
-      "LOGS": {
-        "202504080914": {
-          "DATE": "7/4/2025 08:13",
-          "USER": "Bob",
-          "AREA": "Office - ",
-          "LINE": null,
-          "STARTTIME": "0813",
-          "ENDTIME": "0813",
-          "DURATION": null,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        }
-      }
-    },
-    "33333": {
-      "SOP": 33333,
+    "12345-FLUSH": {
+      "SOP": 12345,
+      "RATING": "FLUSH",
       "WRITTEN-UP": "Yes",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
-        "202504080920": {
-          "DATE": "7/4/2025 08:19",
-          "USER": "BOBq",
-          "AREA": "Office - WRITEN-UP",
+        "202504081407": {
+          "DATE": "08/04/2025 14:07",
+          "USER": "Sam",
+          "AREA": "Office - WRITTEN-UP",
           "LINE": null,
-          "STARTTIME": "0819",
-          "ENDTIME": "0819",
-          "DURATION": null,
+          "STARTTIME": "1407",
+          "ENDTIME": "1407",
+          "DURATION": 0,
           "STATUS": "COMPLETE",
-          "NOTES": ""
+          "NOTES": "Flush first"
         }
       }
     },
-    "72121": {
+    "72121-FIRE": {
       "SOP": 72121,
+      "RATING": "FIRE",
       "WRITTEN-UP": "No",
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
-        "202504080842": {
-          "DATE": "7/4/2025 07:40",
+        "202504081412": {
+          "DATE": "08/04/2025 14:12",
           "USER": "BOB",
           "AREA": "Office - ",
           "LINE": null,
-          "STARTTIME": "0741",
-          "ENDTIME": "0741",
-          "DURATION": null,
+          "STARTTIME": "1412",
+          "ENDTIME": "1412",
+          "DURATION": 0,
           "STATUS": "COMPLETE",
           "NOTES": ""
         },
-        "202504070745": {
-          "DATE": "7/4/2025 07:45",
+        "202504081414": {
+          "DATE": "08/04/2025 14:14",
           "USER": "BOB",
-          "AREA": "WALL-SAW - FIRE-DOORS",
+          "AREA": "FIRE-DOORS - COLD-PRESS",
           "LINE": "1",
-          "STARTTIME": "0745",
-          "ENDTIME": "0745",
+          "STARTTIME": "1414",
+          "ENDTIME": "1414",
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
         },
-        "202504070842": {
-          "DATE": "07/04/2025 08:42",
-          "USER": "FRANK",
-          "AREA": "HOT-PRESS - FIRE-DOORS",
-          "LINE": "2",
-          "STARTTIME": "0842",
-          "ENDTIME": "0842",
-          "DURATION": 1,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        },
-        "202504071012": {
-          "DATE": "07/04/2025 10:12",
+        "202504081424": {
+          "DATE": "08/04/2025 14:24",
           "USER": "JIM",
-          "AREA": "HAND-TOOLS - FIRE-DOORS",
+          "AREA": "FIRE-DOORS - HAND-TOOLS",
           "LINE": "1",
-          "STARTTIME": "1012",
-          "ENDTIME": "1012",
-          "DURATION": 1,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        },
-        "202504071126": {
-          "DATE": "07/04/2025 11:26",
-          "USER": "BOB",
-          "AREA": "WRAPPED - DESPATCH",
-          "LINE": "2",
-          "STARTTIME": "1126",
-          "ENDTIME": "1126",
-          "DURATION": 1,
-          "STATUS": "COMPLETE",
-          "NOTES": ""
-        },
-        "202504071253": {
-          "DATE": "07/04/2025 12:53",
+          "STARTTIME": "1424",
+          "ENDTIME": "1430",
+          "DURATION": 6,
+          "STATUS": "WIP",
+          "NOTES": "missing glass"
+        }
+      }
+    },
+    "72121-FLUSH": {
+      "SOP": 72121,
+      "RATING": "FLUSH",
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504081412": {
+          "DATE": "08/04/2025 14:12",
           "USER": "FRANK",
-          "AREA": "ISSUED-FACTORY - OFFICE",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1412",
+          "ENDTIME": "1412",
+          "DURATION": 0,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504081414": {
+          "DATE": "08/04/2025 14:14",
+          "USER": "FRANK",
+          "AREA": "FIRE-DOORS - SANDER",
+          "LINE": "5",
+          "STARTTIME": "1414",
+          "ENDTIME": "1414",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504081421": {
+          "DATE": "08/04/2025 14:21",
+          "USER": "BOB",
+          "AREA": "FIRE-DOORS - HOT-PRESS",
           "LINE": "1",
-          "STARTTIME": "1220",
-          "ENDTIME": "1253",
-          "DURATION": 33,
+          "STARTTIME": "1421",
+          "ENDTIME": "1421",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "72211-FIRE": {
+      "SOP": 72211,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "No",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504081426": {
+          "DATE": "08/04/2025 14:26",
+          "USER": "BOB",
+          "AREA": "Office - ",
+          "LINE": null,
+          "STARTTIME": "1426",
+          "ENDTIME": "1426",
+          "DURATION": 0,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504081427": {
+          "DATE": "08/04/2025 14:27",
+          "USER": "Sam",
+          "AREA": "FIRE-DOORS - WALL-SAW",
+          "LINE": "1",
+          "STARTTIME": "1427",
+          "ENDTIME": "1427",
+          "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
         }
