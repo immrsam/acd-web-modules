@@ -83,6 +83,38 @@
     </section>
     <p><b>*BEFORE LEAVING PAGE*</b></p>
     <p>Export the file and replace the existing JSON file in C:\Sam Bradbury\ACD_WEB_MODULES\test.json</p>
+    <div id="newOrderModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Order Not Found - Create New?</h2>
+            <form id="newOrderForm">
+                <div class="formLine">
+                    <label for="newSop">SOP</label>
+                    <input type="number" id="newSop" readonly>
+                </div>
+                <div class="formLine">
+                    <label for="newRating">RATING</label>
+                    <input type="text" id="newRating" readonly>
+                </div>
+                <div class="formLine">
+                    <label for="newUser">USER</label>
+                    <input type="text" id="newUser" required>
+                </div>
+                <div class="formLine">
+                    <label for="newWrittenUp">Written Up?</label>
+                    <input type="checkbox" id="newWrittenUp">
+                </div>
+                <div class="formLine">
+                    <label for="newNotes">Notes</label>
+                    <textarea id="newNotes" rows="3"></textarea>
+                </div>
+                <div class="formLine">
+                    <button type="submit" class="btn lbg">Create Order</button>
+                    <button type="button" class="btn lbg" id="cancelNewOrder">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="scripts.js"></script>
 </body>
 </html>

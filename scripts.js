@@ -15,263 +15,522 @@ const locationOptions = {
     "DESPATCH": ["WRAPPED", "SENT"]
 };
 
-function getData(url, cb) {
-    fetch(url)
-        .then(response => response.json())
-        .then(result => cb(result))
-        .catch(error => console.error('Error loading data:', error));
+// Cache DOM elements
+const domCache = {
+    messageDiv: document.getElementById('messageDiv'),
+    locationInput: document.getElementById('location'),
+    subOptionDatalist: document.getElementById('sub-options')
+};
+
+/**
+ * Fetches data from a URL and passes it to a callback
+ * @param {string} url - The URL to fetch data from
+ * @param {function} cb - Callback function to handle the data
+ */
+async function getData(url, cb) {
+    try {
+        const response = await fetch(url);
+        const result = await response.json();
+        cb(result);
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
 }
 
+/**
+ * Displays a message in the specified element
+ * @param {string} text - The message to display
+ * @param {string} elementId - The ID of the element to display the message in
+ */
 function showMessage(text, elementId = 'messageDiv') {
-    const messageDiv = document.getElementById(elementId);
-    if (messageDiv) messageDiv.textContent = text;
+    const element = domCache[elementId] || document.getElementById(elementId);
+    if (element) element.textContent = text;
 }
 
+/**
+ * Gets the current time in HHMM format
+ * @returns {string} Current time as HHMM
+ */
 function getCurrentTime() {
     const now = new Date();
-    return String(now.getHours()).padStart(2, '0') + 
-           String(now.getMinutes()).padStart(2, '0');
+    return now.getHours().toString().padStart(2, '0') + 
+           now.getMinutes().toString().padStart(2, '0');
 }
 
+/**
+ * Calculates duration between two times
+ * @param {string} start - Start time in HHMM format
+ * @param {string} end - End time in HHMM format
+ * @returns {number} Duration in minutes (minimum 1)
+ */
 function getDuration(start, end) {
-    let result = parseInt(end) - parseInt(start);
+    const result = parseInt(end, 10) - parseInt(start, 10);
     return result < 1 ? 1 : result;
+}
+
+/**
+ * Prevents form submission on Enter key and moves to next input
+ * @param {HTMLElement} inputElement - The input element to attach the handler to
+ */
+function preventSubmitOnEnter(inputElement) {
+    inputElement.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const form = inputElement.form;
+            const inputs = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, textarea'));
+            const currentIndex = inputs.indexOf(inputElement);
+            if (currentIndex < inputs.length - 1) {
+                inputs[currentIndex + 1].focus();
+            }
+        }
+    });
+}
+
+/**
+ * Creates a formatted date string
+ * @param {Date} date - Date object to format
+ * @returns {string} Formatted date string (DD/MM/YYYY HH:MM)
+ */
+function formatDate(date) {
+    return [
+        date.getDate().toString().padStart(2, '0'),
+        (date.getMonth() + 1).toString().padStart(2, '0'),
+        date.getFullYear()
+    ].join('/') + ' ' + [
+        date.getHours().toString().padStart(2, '0'),
+        date.getMinutes().toString().padStart(2, '0')
+    ].join(':');
+}
+
+/**
+ * Creates a timestamp string from a Date object
+ * @param {Date} date - Date object to convert
+ * @returns {string} Timestamp string (YYYYMMDDHHmm)
+ */
+function createTimestamp(date) {
+    return [
+        date.getFullYear(),
+        (date.getMonth() + 1).toString().padStart(2, '0'),
+        date.getDate().toString().padStart(2, '0'),
+        date.getHours().toString().padStart(2, '0'),
+        date.getMinutes().toString().padStart(2, '0')
+    ].join('');
 }
 
 // ======================
 // LOCATION FUNCTIONALITY
 // ======================
+
+/**
+ * Updates the sub-options datalist based on selected location
+ */
 function updateOptions() {
-    const locationInput = document.getElementById('location');
-    const subOptionDatalist = document.getElementById('sub-options');
-    
-    if (!locationInput || !subOptionDatalist) {
+    if (!domCache.locationInput || !domCache.subOptionDatalist) {
         console.error('Location elements missing');
         return;
     }
     
-    subOptionDatalist.innerHTML = '';
-    const selectedLocation = locationInput.value;
+    domCache.subOptionDatalist.innerHTML = '';
+    const selectedLocation = domCache.locationInput.value;
     
     if (locationOptions[selectedLocation]) {
         locationOptions[selectedLocation].forEach(option => {
             const optionElement = document.createElement('option');
             optionElement.value = option;
-            subOptionDatalist.appendChild(optionElement);
+            domCache.subOptionDatalist.appendChild(optionElement);
         });
     }
 }
 
+/**
+ * Initializes location input handlers
+ */
 function initializeLocationHandlers() {
-    const locationInput = document.getElementById('location');
-    if (locationInput) {
-        locationInput.addEventListener('change', updateOptions);
-        if (locationInput.value) updateOptions();
+    if (domCache.locationInput) {
+        domCache.locationInput.addEventListener('change', updateOptions);
+        if (domCache.locationInput.value) updateOptions();
     }
 }
 
 // ======================
 // SCAN PAGE FUNCTIONALITY
 // ======================
+
+/**
+ * Handles new order creation
+ * @param {string} sop - SOP number
+ * @param {string} rating - Order rating
+ * @param {string} user - User name
+ * @param {boolean} writtenUp - Whether order is written up
+ * @param {string} notes - Additional notes
+ */
+function createNewOrder(sop, rating, user, writtenUp, notes) {
+    const now = new Date();
+    const timestamp = createTimestamp(now);
+    const date = formatDate(now);
+
+    jsonData.orders[`${sop}-${rating}`] = {
+        SOP: parseInt(sop, 10),
+        RATING: rating,
+        'WRITTEN-UP': writtenUp ? "Yes" : "No",
+        'ISSUED-TO-FACTORY': false,
+        'FACTORY-COMPLETE': false,
+        'DISPATCH': null,
+        'LOGS': {}
+    };
+
+    const newLog = {
+        "DATE": date,
+        "USER": user,
+        "AREA": "Office - " + (writtenUp ? "WRITTEN-UP" : ""),
+        "LINE": null,
+        "STARTTIME": getCurrentTime(),
+        "ENDTIME": getCurrentTime(),
+        "DURATION": 0,
+        "STATUS": "COMPLETE",
+        "NOTES": notes
+    };
+
+    jsonData.orders[`${sop}-${rating}`].LOGS[timestamp] = newLog;
+    localStorage.setItem('orderData', JSON.stringify(jsonData));
+    showMessage(`Order ${sop} (${rating}) created successfully!`);
+}
+
+/**
+ * Handles existing order updates
+ * @param {string} orderKey - Order key (SOP-RATING)
+ * @param {object} formData - Form data object
+ */
+function updateExistingOrder(orderKey, formData) {
+    const now = new Date();
+    const timestamp = createTimestamp(now);
+    const date = formatDate(now);
+
+    const newLog = {
+        "DATE": date,
+        "USER": formData.user,
+        "AREA": formData.area + ' - ' + formData.subArea,
+        "LINE": formData.lineSelect,
+        "STARTTIME": formData.startTime,
+        "ENDTIME": formData.endTime,
+        "DURATION": getDuration(formData.startTime, formData.endTime),
+        "STATUS": formData.statusInput,
+        "NOTES": formData.notes
+    };
+
+    jsonData.orders[orderKey].LOGS[timestamp] = newLog;
+    localStorage.setItem('orderData', JSON.stringify(jsonData));
+    showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
+}
+
+/**
+ * Exports data to JSON file
+ */
+function exportData() {
+    try {
+        const rawData = localStorage.getItem('orderData');
+        const dataStr = JSON.stringify(JSON.parse(rawData), null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'test.json';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 100);
+    } catch (e) {
+        showMessage('Error exporting data: ' + e.message);
+        console.error('Export error:', e);
+    }
+}
+
+/**
+ * Sets up the scan page functionality
+ */
 function setupScanPage() {
     console.log("Scan loaded");
     
     const orderForm = document.getElementById('orderForm');
     const exportBtn = document.getElementById('exportBtn');
+    const newOrderModal = document.getElementById('newOrderModal');
+    const newOrderForm = document.getElementById('newOrderForm');
+    const cancelNewOrderBtn = document.getElementById('cancelNewOrder');
+    const closeModalBtn = document.querySelector('.close-modal');
 
     if (!jsonData) {
         jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
     }
 
-    if (orderForm) {
-        orderForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const sop = document.getElementById('sop').value.trim();
-            const user = document.getElementById('user').value.trim();
-            const lineSelect = document.getElementById('lineSelect').value.trim();
-            const area = document.getElementById('location').value.trim();
-            const subArea = document.getElementById('sub-option').value.trim();
-            const startTime = document.getElementById('startTimeInput').value.trim();
-            const endTime = document.getElementById('endTimeInput').value.trim();
-            const notes = document.getElementById('notesInput').value.trim();
-            const statusInput = document.getElementById('statusInput').value.trim();
-            const rating = document.getElementById('ratingSelect').value.trim(); // Add this input
-    
-            if (!sop) {
-                showMessage('Please enter a valid SOP');
-                return;
-            }
-    
-            const orderKey = `${sop}-${rating}`; // Use SOP + RATING as key
-            if (jsonData.orders[orderKey]) {
-                const now = new Date();
-                const timestamp = now.getFullYear().toString() + 
-                    String(now.getMonth() + 1).padStart(2, '0') + 
-                    String(now.getDate()).padStart(2, '0') + 
-                    String(now.getHours()).padStart(2, '0') + 
-                    String(now.getMinutes()).padStart(2, '0');
-                
-                const date = String(now.getDate()).padStart(2, '0') + '/' + 
-                    String(now.getMonth() + 1).padStart(2, '0') + '/' + 
-                    now.getFullYear() + ' ' + 
-                    String(now.getHours()).padStart(2, '0') + ':' +
-                    String(now.getMinutes()).padStart(2, '0');
-    
-                const newLog = {
-                    "DATE": date,
-                    "USER": user,
-                    "AREA": area + ' - ' + subArea,
-                    "LINE": lineSelect,
-                    "STARTTIME": startTime,
-                    "ENDTIME": endTime,
-                    "DURATION": getDuration(startTime, endTime),
-                    "STATUS": statusInput,
-                    "NOTES": notes
-                };
-    
-                jsonData.orders[orderKey].LOGS[timestamp] = newLog;
-                localStorage.setItem('orderData', JSON.stringify(jsonData));
-                showMessage(`Order ${sop} (${rating}) updated successfully!`);
-                orderForm.reset();
-                return;
-            }
-    
-            showMessage(`Order ${sop} (${rating}) not in system`);
-        });
-    }
-
-    if (exportBtn) {
-        exportBtn.addEventListener('click', function() {
-            const rawData = localStorage.getItem('orderData');
-            try {
-                const dataStr = JSON.stringify(JSON.parse(rawData), null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'test.json';
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 100);
-            } catch (e) {
-                showMessage('Error exporting data: ' + e.message);
-                console.error('Export error:', e);
-            }
-        });
-    }
-
     // Timer functionality
     let timerStarted = false;
     let startTime = "";
-    document.getElementById('startTimer').addEventListener('click', function() {
+    document.getElementById('startTimer')?.addEventListener('click', () => {
         timerStarted = true;
         startTime = getCurrentTime();
         document.getElementById('startTimeInput').value = startTime;
     });
     
-    document.getElementById('endTimer').addEventListener('click', function() {
+    document.getElementById('endTimer')?.addEventListener('click', () => {
         if (!timerStarted) {
-            document.getElementById('endTime').innerHTML = "Start timer first";
+            document.getElementById('endTime').textContent = "Start timer first";
             return;
         }
         const endTime = getCurrentTime();
         document.getElementById('endTimeInput').value = endTime;
     });
+
+    // Modal functions
+    const hideNewOrderModal = () => {
+        newOrderModal.style.display = 'none';
+        newOrderForm?.reset();
+    };
+
+    const showNewOrderModal = (sop, rating) => {
+        document.getElementById('newSop').value = sop;
+        document.getElementById('newRating').value = rating;
+        document.getElementById('newUser').value = document.getElementById('user').value;
+        newOrderModal.style.display = 'block';
+    };
+
+    // Modal event listeners
+    closeModalBtn?.addEventListener('click', hideNewOrderModal);
+    cancelNewOrderBtn?.addEventListener('click', hideNewOrderModal);
+    window.addEventListener('click', (event) => {
+        if (event.target === newOrderModal) {
+            hideNewOrderModal();
+        }
+    });
+
+    // New order form submission
+    newOrderForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const sop = document.getElementById('newSop').value.trim();
+        const rating = document.getElementById('newRating').value.trim();
+        const user = document.getElementById('newUser').value.trim();
+        const writtenUp = document.getElementById('newWrittenUp').checked;
+        const notes = document.getElementById('newNotes').value.trim();
+
+        const now = new Date();
+        const timestamp = createTimestamp(now);
+        const date = formatDate(now);
+
+        jsonData.orders[`${sop}-${rating}`] = {
+            SOP: parseInt(sop, 10),
+            RATING: rating,
+            'WRITTEN-UP': writtenUp ? "Yes" : "No",
+            'ISSUED-TO-FACTORY': false,
+            'FACTORY-COMPLETE': false,
+            'DISPATCH': null,
+            'LOGS': {}
+        };
+
+        const newLog = {
+            "DATE": date,
+            "USER": user,
+            "AREA": "Office - " + (writtenUp ? "WRITTEN-UP" : ""),
+            "LINE": null,
+            "STARTTIME": getCurrentTime(),
+            "ENDTIME": getCurrentTime(),
+            "DURATION": 0,
+            "STATUS": "COMPLETE",
+            "NOTES": notes
+        };
+
+        jsonData.orders[`${sop}-${rating}`].LOGS[timestamp] = newLog;
+        localStorage.setItem('orderData', JSON.stringify(jsonData));
+        
+        showMessage(`Order ${sop} (${rating}) created successfully!`);
+        hideNewOrderModal();
+    });
+
+    // Main order form submission
+    // Main order form submission
+orderForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const formData = {
+        sop: document.getElementById('sop').value.trim(),
+        user: document.getElementById('user').value.trim(),
+        lineSelect: document.getElementById('lineSelect').value.trim(),
+        area: document.getElementById('location').value.trim(),
+        subArea: document.getElementById('sub-option').value.trim(),
+        startTime: document.getElementById('startTimeInput').value.trim(),
+        endTime: document.getElementById('endTimeInput').value.trim(),
+        notes: document.getElementById('notesInput').value.trim(),
+        statusInput: document.getElementById('statusInput').value.trim(),
+        rating: document.getElementById('ratingSelect').value.trim()
+    };
+
+    if (!formData.sop) {
+        showMessage('Please enter a valid SOP');
+        return;
+    }
+
+    const orderKey = `${formData.sop}-${formData.rating}`;
+
+    // If order doesn't exist, show modal REGARDLESS of scan type
+    if (!jsonData.orders[orderKey]) {
+        showNewOrderModal(formData.sop, formData.rating);
+        return;
+    }
+
+    const now = new Date();
+    const timestamp = createTimestamp(now);
+    const date = formatDate(now);
+
+    const newLog = {
+        "DATE": date,
+        "USER": formData.user,
+        "AREA": `${formData.area} - ${formData.subArea}`,
+        "LINE": formData.lineSelect,
+        "STARTTIME": formData.startTime,
+        "ENDTIME": formData.endTime,
+        "DURATION": getDuration(formData.startTime, formData.endTime),
+        "STATUS": formData.statusInput,
+        "NOTES": formData.notes
+    };
+
+    // Update status if order exists
+    switch (`${formData.area}-${formData.subArea}`) {
+        case 'OFFICE-WRITTEN-UP':
+            jsonData.orders[orderKey]['WRITTEN-UP'] = "Yes";
+            break;
+        case 'OFFICE-ISSUED-FACTORY':
+            if (jsonData.orders[orderKey]['WRITTEN-UP'] === "Yes") {
+                jsonData.orders[orderKey]['ISSUED-TO-FACTORY'] = true;
+            } else {
+                showMessage('Order must be written up before issuing to factory');
+                return;
+            }
+            break;
+        case 'OFFICE-FACTORY-COMPLETE':
+            if (jsonData.orders[orderKey]['ISSUED-TO-FACTORY']) {
+                jsonData.orders[orderKey]['FACTORY-COMPLETE'] = true;
+            } else {
+                showMessage('Order must be issued to factory before completion');
+                return;
+            }
+            break;
+        case 'DESPATCH-WRAPPED':
+        case 'DESPATCH-SENT':
+            if (jsonData.orders[orderKey]['FACTORY-COMPLETE']) {
+                jsonData.orders[orderKey]['DISPATCH'] = formData.subArea;
+            } else {
+                showMessage('Order must be factory complete before dispatch');
+                return;
+            }
+            break;
+    }
+
+    // Add the log entry
+    jsonData.orders[orderKey].LOGS[timestamp] = newLog;
+    localStorage.setItem('orderData', JSON.stringify(jsonData));
+    
+    showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
+    orderForm.reset();
+});
+
+    // Export button
+    exportBtn?.addEventListener('click', exportData);
 }
 
-// ======================
-// JOB LIST PAGE FUNCTIONALITY
-// ======================
-function populateData() {
-  const tableBody = document.querySelector('#dataTable tbody');
-  if (!tableBody) return;
-
-  tableBody.innerHTML = '';
-
-  for (const orderKey in jsonData.orders) {
-    const order = jsonData.orders[orderKey];
-    const row = document.createElement('tr');
-
-      // SOP Cell
-      const sopCell = document.createElement('td');
-      const sopLink = document.createElement('a');
-      sopLink.href = `results.html?sop=${order.SOP}&rating=${order.RATING}`; // Pass both SOP & RATING
-      sopLink.textContent = order.SOP;
-      sopCell.appendChild(sopLink);
-      row.appendChild(sopCell);
-      
-      // RATING Cell
-      const ratingCell = document.createElement('td');
-      ratingCell.textContent = order.RATING;
-      row.appendChild(ratingCell);
-
-
-      // Status Cells (unchanged)
-      row.appendChild(createStatusCell(order['WRITTEN-UP']));
-      row.appendChild(createStatusCell(order['ISSUED-TO-FACTORY']));
-      row.appendChild(createStatusCell(order['FACTORY-COMPLETE']));
-      
-      // Location and Date Cells - FINAL WORKING VERSION
-      const locationCell = document.createElement('td');
-      const dateCell = document.createElement('td');
-      
-      if (order.LOGS && Object.keys(order.LOGS).length > 0) {
-          // Convert logs to array and sort by actual DATE field
-          const logEntries = Object.entries(order.LOGS);
-          
-          logEntries.sort((a, b) => {
-              // Parse dates into comparable format
-              const dateA = parseLogDate(a[1].DATE);
-              const dateB = parseLogDate(b[1].DATE);
-              return dateB - dateA; // Newest first
-          });
-          
-          const newestLog = logEntries[0][1];
-          locationCell.textContent = newestLog.AREA || "-";
-          dateCell.textContent = newestLog.DATE || "-";
-      } else {
-          locationCell.textContent = "-";
-          dateCell.textContent = "-";
-      }
-      
-      row.appendChild(locationCell);
-      row.appendChild(dateCell);
-      
-      // Dispatch Cell (unchanged)
-      const dispatchCell = document.createElement('td');
-      dispatchCell.textContent = order.DISPATCH || "-";
-      row.appendChild(dispatchCell);
-
-      tableBody.appendChild(row);
-  }
-}
-
-// Helper function to parse both date formats
-function parseLogDate(dateString) {
-  const [datePart, timePart] = dateString.split(' ');
-  const [day, month, year] = datePart.split('/');
-  const [hours, minutes] = timePart.split(':');
-  
-  // Create Date object (months are 0-indexed)
-  return new Date(
-      parseInt(year),
-      parseInt(month) - 1,
-      parseInt(day),
-      parseInt(hours),
-      parseInt(minutes)
-  );
-}
-
-// Helper function for status cells
+/**
+ * Creates a status cell with Yes/No text
+ * @param {*} value - The value to evaluate
+ * @returns {HTMLTableCellElement} The created cell
+ */
 function createStatusCell(value) {
-  const cell = document.createElement('td');
-  cell.textContent = value ? 'Yes' : 'No';
-  return cell;
+    const cell = document.createElement('td');
+    if(!value) {cell.textContent = "No";}
+     else cell.textContent = value;
+    return cell;
 }
 
+/**
+ * Parses a log date string into a Date object
+ * @param {string} dateString - Date string in DD/MM/YYYY HH:MM format
+ * @returns {Date} Parsed Date object
+ */
+function parseLogDate(dateString) {
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const [hours, minutes] = timePart.split(':');
+    
+    return new Date(
+        parseInt(year, 10),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10),
+        parseInt(hours, 10),
+        parseInt(minutes, 10)
+    );
+}
+
+/**
+ * Populates the data table with order information
+ */
+function populateData() {
+    const tableBody = document.querySelector('#dataTable tbody');
+    if (!tableBody) return;
+
+    tableBody.innerHTML = '';
+
+    for (const orderKey in jsonData.orders) {
+        const order = jsonData.orders[orderKey];
+        const row = document.createElement('tr');
+
+        // SOP Cell with link
+        const sopCell = document.createElement('td');
+        const sopLink = document.createElement('a');
+        sopLink.href = `results.html?sop=${order.SOP}&rating=${order.RATING}`;
+        sopLink.textContent = order.SOP;
+        sopCell.appendChild(sopLink);
+        row.appendChild(sopCell);
+        
+        // RATING Cell
+        const ratingCell = document.createElement('td');
+        ratingCell.textContent = order.RATING;
+        row.appendChild(ratingCell);
+
+        // Status Cells
+        row.appendChild(createStatusCell(order['WRITTEN-UP']));
+        row.appendChild(createStatusCell(order['ISSUED-TO-FACTORY']));
+        row.appendChild(createStatusCell(order['FACTORY-COMPLETE']));
+        console.log(`SOP: ${orderKey}\nWRITTEN-UP: ${order['WRITTEN-UP']}\nISSUED-TO-FACTORY: ${order['ISSUED-TO-FACTORY']}\nFACTORY-COMPLETE: ${order['FACTORY-COMPLETE']}`);
+        
+        // Location and Date Cells
+        const locationCell = document.createElement('td');
+        const dateCell = document.createElement('td');
+        
+        if (order.LOGS && Object.keys(order.LOGS).length > 0) {
+            const logEntries = Object.entries(order.LOGS);
+            logEntries.sort((a, b) => parseLogDate(b[1].DATE) - parseLogDate(a[1].DATE));
+            
+            const newestLog = logEntries[0][1];
+            locationCell.textContent = newestLog.AREA || "-";
+            dateCell.textContent = newestLog.DATE || "-";
+        } else {
+            locationCell.textContent = "-";
+            dateCell.textContent = "-";
+        }
+        
+        row.appendChild(locationCell);
+        row.appendChild(dateCell);
+        
+        // Dispatch Cell
+        const dispatchCell = document.createElement('td');
+        dispatchCell.textContent = order.DISPATCH || "-";
+        row.appendChild(dispatchCell);
+
+        tableBody.appendChild(row);
+    }
+}
+
+/**
+ * Sets up search functionality for the job list
+ */
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
     if (!searchInput) return;
@@ -282,15 +541,9 @@ function setupSearch() {
         let hasResults = false;
         
         rows.forEach(row => {
-            const sopCell = row.cells[0];
-            const sopText = sopCell.textContent.toLowerCase();
-            
-            if (sopText.includes(searchTerm)) {
-                row.style.display = '';
-                hasResults = true;
-            } else {
-                row.style.display = 'none';
-            }
+            const sopText = row.cells[0].textContent.toLowerCase();
+            row.style.display = sopText.includes(searchTerm) ? '' : 'none';
+            if (sopText.includes(searchTerm)) hasResults = true;
         });
         
         const noResults = document.getElementById('noResults');
@@ -301,77 +554,50 @@ function setupSearch() {
 // ======================
 // ORDER DETAILS PAGE
 // ======================
+
+/**
+ * Displays order details on the results page
+ */
 function displayOrderDetails() {
-    // Exit if not on the results page
     if (!window.location.pathname.includes('results.html')) return;
     
-    // Get SOP and RATING from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const sop = urlParams.get('sop');
     const rating = urlParams.get('rating');
     
-    // Validate required parameters
     if (!sop || !rating) {
         document.getElementById('sop-number').textContent = 'Missing SOP or RATING in URL';
         return;
     }
     
-    // Construct the unique order key (SOP-RATING)
     const orderKey = `${sop}-${rating}`;
     const order = jsonData.orders[orderKey];
     
-    // Handle case where order doesn't exist
     if (!order) {
         document.getElementById('sop-number').textContent = `Order ${sop} (${rating}) not found!`;
         return;
     }
     
-    // Update the header with SOP and RATING
     document.getElementById('sop-number').textContent = `SOP: ${order.SOP} (${order.RATING})`;
-    
-    // Clear existing table data
     const tableBody = document.querySelector('#logTable tbody');
     tableBody.innerHTML = '';
     
-    // Check if logs exist
     if (order.LOGS && Object.keys(order.LOGS).length > 0) {
-        // Convert logs to an array and sort by DATE (newest first)
         const logEntries = Object.entries(order.LOGS);
+        logEntries.sort((a, b) => parseLogDate(b[1].DATE) - parseLogDate(a[1].DATE));
         
-        logEntries.sort((a, b) => {
-            const dateA = parseLogDate(a[1].DATE);
-            const dateB = parseLogDate(b[1].DATE);
-            return dateB - dateA; // Newest first
-        });
+        const properties = ['DATE', 'USER', 'AREA', 'LINE', 'STARTTIME', 'ENDTIME', 'DURATION', 'STATUS', 'NOTES'];
         
-        // Populate the table with log data
         logEntries.forEach(([logId, log]) => {
             const row = document.createElement('tr');
-            
-            // Define the properties to display (in order)
-            const properties = [
-                'DATE',
-                'USER',
-                'AREA',
-                'LINE',
-                'STARTTIME',
-                'ENDTIME',
-                'DURATION',
-                'STATUS',
-                'NOTES'
-            ];
-            
-            // Create a cell for each property
             properties.forEach(prop => {
                 const cell = document.createElement('td');
-                cell.textContent = log[prop] || "-"; // Show "-" if empty
+                cell.textContent = log[prop] || "-";
                 row.appendChild(cell);
             });
-            
             tableBody.appendChild(row);
         });
     } else {
-        // Show a "No logs" message if none exist
         const row = document.createElement('tr');
         const cell = document.createElement('td');
         cell.setAttribute('colspan', '9');
@@ -381,25 +607,13 @@ function displayOrderDetails() {
     }
 }
 
-// Helper function to parse date strings (DD/MM/YYYY HH:MM)
-function parseLogDate(dateString) {
-    const [datePart, timePart] = dateString.split(' ');
-    const [day, month, year] = datePart.split('/');
-    const [hours, minutes] = timePart.split(':');
-    
-    // Return a Date object (months are 0-indexed)
-    return new Date(
-        parseInt(year),
-        parseInt(month) - 1,
-        parseInt(day),
-        parseInt(hours),
-        parseInt(minutes)
-    );
-}
-
 // ======================
 // NEW JOB PAGE
 // ======================
+
+/**
+ * Sets up the new job page functionality
+ */
 function setupNewJobPage() {
     console.log("New Job Loaded");
     const orderForm = document.getElementById('orderForm');
@@ -409,93 +623,32 @@ function setupNewJobPage() {
         jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
     }
 
-    if (orderForm) {
-        orderForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const sop = document.getElementById('sopNumber').value.trim();
-            const user = document.getElementById('user').value.trim();
-            const writtenUp = document.getElementById('writtenUp').checked;
-            const notes = document.getElementById('notesInput').value.trim();
-            const rating = document.getElementById('ratingSelect').value.trim(); // Assuming a <select> for FIRE/FLUSH
-    
-            if (!sop) {
-                showMessage('Please enter a valid SOP');
-                return;
-            }
-    
-            // Check if an order with this SOP + RATING already exists
-            const existingOrder = Object.values(jsonData.orders).find(
-                order => order.SOP == sop && order.RATING === rating
-            );
-    
-            if (!existingOrder) {
-                const now = new Date();
-                const timestamp = now.getFullYear().toString() + 
-                    String(now.getMonth() + 1).padStart(2, '0') + 
-                    String(now.getDate()).padStart(2, '0') + 
-                    String(now.getHours()).padStart(2, '0') + 
-                    String(now.getMinutes()).padStart(2, '0');
-                
-                const date = String(now.getDate()).padStart(2, '0') + '/' + 
-                    String(now.getMonth() + 1).padStart(2, '0') + '/' + 
-                    now.getFullYear() + ' ' + 
-                    String(now.getHours()).padStart(2, '0') + ':' +
-                    String(now.getMinutes()).padStart(2, '0');
-    
-                jsonData.orders[`${sop}-${rating}`] = {  // Use SOP-RATING as key for uniqueness
-                    SOP: parseInt(sop),
-                    RATING: rating,  // Store the rating
-                    'WRITTEN-UP': writtenUp ? "Yes" : "No",
-                    'ISSUED-TO-FACTORY': false,
-                    'FACTORY-COMPLETE': false,
-                    'DISPATCH': null,
-                    'LOGS': {}
-                };
-    
-                const newLog = {
-                    "DATE": date,
-                    "USER": user,
-                    "AREA": "Office - " + (writtenUp ? "WRITTEN-UP" : ""),
-                    "LINE": null,
-                    "STARTTIME": getCurrentTime(),
-                    "ENDTIME": getCurrentTime(),
-                    "DURATION": 0,
-                    "STATUS": "COMPLETE",
-                    "NOTES": notes
-                };
-    
-                jsonData.orders[`${sop}-${rating}`].LOGS[timestamp] = newLog;
-                localStorage.setItem('orderData', JSON.stringify(jsonData));
-                showMessage(`Order ${sop} (${rating}) created successfully!`);
-                orderForm.reset();
-            } else {
-                showMessage(`Order ${sop} (${rating}) already exists!`);
-            }
-        });
-    }
+    orderForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const sop = document.getElementById('sopNumber').value.trim();
+        const user = document.getElementById('user').value.trim();
+        const writtenUp = document.getElementById('writtenUp').checked;
+        const notes = document.getElementById('notesInput').value.trim();
+        const rating = document.getElementById('ratingSelect').value.trim();
 
-    if (exportBtn) {
-        exportBtn.addEventListener('click', function() {
-            const rawData = localStorage.getItem('orderData');
-            try {
-                const dataStr = JSON.stringify(JSON.parse(rawData), null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'test.json';
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }, 100);
-            } catch (e) {
-                showMessage('Error exporting data: ' + e.message);
-                console.error('Export error:', e);
-            }
-        });
-    }
+        if (!sop) {
+            showMessage('Please enter a valid SOP');
+            return;
+        }
+
+        const existingOrder = Object.values(jsonData.orders).find(
+            order => order.SOP == sop && order.RATING === rating
+        );
+
+        if (!existingOrder) {
+            createNewOrder(sop, rating, user, writtenUp, notes);
+            orderForm.reset();
+        } else {
+            showMessage(`Order ${sop} (${rating}) already exists!`);
+        }
+    });
+
+    exportBtn?.addEventListener('click', exportData);
 }
 
 // ======================
@@ -504,19 +657,17 @@ function setupNewJobPage() {
 document.addEventListener('DOMContentLoaded', () => {
     getData('./test.json', (data) => {
         jsonData = data;
+        const path = window.location.pathname;
         
-        if (window.location.pathname.includes('results.html')) {
+        if (path.includes('results.html')) {
             displayOrderDetails();
-        } 
-        else if (window.location.pathname.includes('JobList.html')) {
+        } else if (path.includes('JobList.html')) {
             populateData();
             setupSearch();
-        } 
-        else if (window.location.pathname.includes('Scan.html')) {
+        } else if (path.includes('Scan.html')) {
             initializeLocationHandlers();
             setupScanPage();
-        }
-        else if (window.location.pathname.includes('newJob.html')) {
+        } else if (path.includes('newJob.html')) {
             setupNewJobPage();
         }
     });

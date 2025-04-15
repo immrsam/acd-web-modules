@@ -3,7 +3,7 @@
     "12345-FIRE": {
       "SOP": 12345,
       "RATING": "FIRE",
-      "WRITTEN-UP": "No",
+      "WRITTEN-UP": false,
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
@@ -18,6 +18,17 @@
           "DURATION": 0,
           "STATUS": "COMPLETE",
           "NOTES": "First"
+        },
+        "202504091103": {
+          "DATE": "09/04/2025 11:03",
+          "USER": "BOB",
+          "AREA": "FIRE-DOORS - HOT-PRESS",
+          "LINE": "1",
+          "STARTTIME": "1103",
+          "ENDTIME": "1103",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
         }
       }
     },
@@ -45,7 +56,7 @@
     "72121-FIRE": {
       "SOP": 72121,
       "RATING": "FIRE",
-      "WRITTEN-UP": "No",
+      "WRITTEN-UP": false,
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
@@ -88,8 +99,8 @@
     "72121-FLUSH": {
       "SOP": 72121,
       "RATING": "FLUSH",
-      "WRITTEN-UP": "No",
-      "ISSUED-TO-FACTORY": false,
+      "WRITTEN-UP": false,
+      "ISSUED-TO-FACTORY": "Yes",
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
@@ -131,7 +142,7 @@
     "72211-FIRE": {
       "SOP": 72211,
       "RATING": "FIRE",
-      "WRITTEN-UP": "No",
+      "WRITTEN-UP": false,
       "ISSUED-TO-FACTORY": false,
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
@@ -154,6 +165,144 @@
           "LINE": "1",
           "STARTTIME": "1427",
           "ENDTIME": "1427",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "72211-FLUSH": {
+      "SOP": 72211,
+      "RATING": "FLUSH",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504091100": {
+          "DATE": "09/04/2025 11:00",
+          "USER": "BOB",
+          "AREA": "OFFICE - ISSUED-FACTORY",
+          "LINE": "1",
+          "STARTTIME": "1100",
+          "ENDTIME": "1100",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "77722-FIRE": {
+      "SOP": 77722,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504091101": {
+          "DATE": "09/04/2025 11:01",
+          "USER": "FRANK",
+          "AREA": "Office - WRITTEN-UP",
+          "LINE": null,
+          "STARTTIME": "1101",
+          "ENDTIME": "1101",
+          "DURATION": 0,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504091102": {
+          "DATE": "09/04/2025 11:02",
+          "USER": "BOB",
+          "AREA": "OFFICE - WRITTEN-UP",
+          "LINE": "1",
+          "STARTTIME": "1102",
+          "ENDTIME": "1102",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504091143": {
+          "DATE": "09/04/2025 11:43",
+          "USER": "",
+          "AREA": " - ",
+          "LINE": "",
+          "STARTTIME": "",
+          "ENDTIME": "",
+          "DURATION": null,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "11223-FLUSH": {
+      "SOP": 11223,
+      "RATING": "FLUSH",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504091443": {
+          "DATE": "09/04/2025 14:43",
+          "USER": "SAM",
+          "AREA": "OFFICE - ISSUED-FACTORY",
+          "LINE": "1",
+          "STARTTIME": "1443",
+          "ENDTIME": "1443",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "77000-FIRE": {
+      "SOP": 77000,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504091445": {
+          "DATE": "09/04/2025 14:45",
+          "USER": "BOB",
+          "AREA": "OFFICE - ISSUED-FACTORY",
+          "LINE": "2",
+          "STARTTIME": "1440",
+          "ENDTIME": "1445",
+          "DURATION": 5,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504091446": {
+          "DATE": "09/04/2025 14:46",
+          "USER": "BOB",
+          "AREA": "FIRE-DOORS - PANEL-SAW",
+          "LINE": "1",
+          "STARTTIME": "1446",
+          "ENDTIME": "1446",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "98765-FIRE": {
+      "SOP": 98765,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": false,
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504151231": {
+          "DATE": "15/04/2025 12:31",
+          "USER": "BOB",
+          "AREA": "OFFICE - WRITTEN-UP",
+          "LINE": "6",
+          "STARTTIME": "1231",
+          "ENDTIME": "1231",
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""
