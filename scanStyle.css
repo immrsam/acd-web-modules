@@ -10,7 +10,6 @@ body {
     margin: 0;
     font-size: 1.3rem;
     background: #4d526b;
-
 }
 
 img {
@@ -21,17 +20,42 @@ h1 {
     margin-top: 0;
 }
 
+.box{
+    background: orange;
+    width: 33%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: stretch;
+    
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    text-transform: none;
+    text-align: center;
+}
+
+.box .icon::before {
+    font-size: 48px;
+  }
+
 .btn {
   display: inline-block;
   text-decoration: none;
   /* text-transform: uppercase; */
   color: white;
   font-weight: 700;
-  padding: .5em 2em;
+  padding: .2em 1em;
   border-radius: 5px;
   letter-spacing: .1rem;
   margin: .1rem;
-  min-width: 110px;
+  min-width: 80px;
 }
 
 .btn:hover,
@@ -57,8 +81,8 @@ h1 {
   position: relative;
   display: flex;
   justify-content: space-around;
-  /* background-color: #455565; */
-  background: #4d526b;
+  border-radius: 20px;
+  padding: 10px;
 
   
 }

@@ -348,90 +348,90 @@ function setupScanPage() {
 
     // Main order form submission
     // Main order form submission
-orderForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const formData = {
-        sop: document.getElementById('sop').value.trim(),
-        user: document.getElementById('user').value.trim(),
-        lineSelect: document.getElementById('lineSelect').value.trim(),
-        area: document.getElementById('location').value.trim(),
-        subArea: document.getElementById('sub-option').value.trim(),
-        startTime: document.getElementById('startTimeInput').value.trim(),
-        endTime: document.getElementById('endTimeInput').value.trim(),
-        notes: document.getElementById('notesInput').value.trim(),
-        statusInput: document.getElementById('statusInput').value.trim(),
-        rating: document.getElementById('ratingSelect').value.trim()
-    };
+    orderForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            sop: document.getElementById('sop').value.trim(),
+            user: document.getElementById('user').value.trim(),
+            lineSelect: document.getElementById('lineSelect').value.trim(),
+            area: document.getElementById('location').value.trim(),
+            subArea: document.getElementById('sub-option').value.trim(),
+            startTime: document.getElementById('startTimeInput').value.trim(),
+            endTime: document.getElementById('endTimeInput').value.trim(),
+            notes: document.getElementById('notesInput').value.trim(),
+            statusInput: document.getElementById('statusInput').value.trim(),
+            rating: document.getElementById('ratingSelect').value.trim()
+        };
 
-    if (!formData.sop) {
-        showMessage('Please enter a valid SOP');
-        return;
-    }
+        if (!formData.sop) {
+            showMessage('Please enter a valid SOP');
+            return;
+        }
 
-    const orderKey = `${formData.sop}-${formData.rating}`;
+        const orderKey = `${formData.sop}-${formData.rating}`;
 
-    // If order doesn't exist, show modal REGARDLESS of scan type
-    if (!jsonData.orders[orderKey]) {
-        showNewOrderModal(formData.sop, formData.rating);
-        return;
-    }
+        // If order doesn't exist, show modal REGARDLESS of scan type
+        if (!jsonData.orders[orderKey]) {
+            showNewOrderModal(formData.sop, formData.rating);
+            return;
+        }
 
-    const now = new Date();
-    const timestamp = createTimestamp(now);
-    const date = formatDate(now);
+        const now = new Date();
+        const timestamp = createTimestamp(now);
+        const date = formatDate(now);
 
-    const newLog = {
-        "DATE": date,
-        "USER": formData.user,
-        "AREA": `${formData.area} - ${formData.subArea}`,
-        "LINE": formData.lineSelect,
-        "STARTTIME": formData.startTime,
-        "ENDTIME": formData.endTime,
-        "DURATION": getDuration(formData.startTime, formData.endTime),
-        "STATUS": formData.statusInput,
-        "NOTES": formData.notes
-    };
+        const newLog = {
+            "DATE": date,
+            "USER": formData.user,
+            "AREA": `${formData.area} - ${formData.subArea}`,
+            "LINE": formData.lineSelect,
+            "STARTTIME": formData.startTime,
+            "ENDTIME": formData.endTime,
+            "DURATION": getDuration(formData.startTime, formData.endTime),
+            "STATUS": formData.statusInput,
+            "NOTES": formData.notes
+        };
 
-    // Update status if order exists
-    switch (`${formData.area}-${formData.subArea}`) {
-        case 'OFFICE-WRITTEN-UP':
-            jsonData.orders[orderKey]['WRITTEN-UP'] = "Yes";
-            break;
-        case 'OFFICE-ISSUED-FACTORY':
-            if (jsonData.orders[orderKey]['WRITTEN-UP'] === "Yes") {
-                jsonData.orders[orderKey]['ISSUED-TO-FACTORY'] = true;
-            } else {
-                showMessage('Order must be written up before issuing to factory');
-                return;
-            }
-            break;
-        case 'OFFICE-FACTORY-COMPLETE':
-            if (jsonData.orders[orderKey]['ISSUED-TO-FACTORY']) {
-                jsonData.orders[orderKey]['FACTORY-COMPLETE'] = true;
-            } else {
-                showMessage('Order must be issued to factory before completion');
-                return;
-            }
-            break;
-        case 'DESPATCH-WRAPPED':
-        case 'DESPATCH-SENT':
-            if (jsonData.orders[orderKey]['FACTORY-COMPLETE']) {
-                jsonData.orders[orderKey]['DISPATCH'] = formData.subArea;
-            } else {
-                showMessage('Order must be factory complete before dispatch');
-                return;
-            }
-            break;
-    }
+        // Update status if order exists
+        switch (`${formData.area}-${formData.subArea}`) {
+            case 'OFFICE-WRITTEN-UP':
+                jsonData.orders[orderKey]['WRITTEN-UP'] = "Yes";
+                break;
+            case 'OFFICE-ISSUED-FACTORY':
+                if (jsonData.orders[orderKey]['WRITTEN-UP'] === "Yes") {
+                    jsonData.orders[orderKey]['ISSUED-TO-FACTORY'] = "Yes";
+                } else {
+                    showMessage('Order must be written up before issuing to factory');
+                    return;
+                }
+                break;
+            case 'OFFICE-FACTORY-COMPLETE':
+                if (jsonData.orders[orderKey]['ISSUED-TO-FACTORY']) {
+                    jsonData.orders[orderKey]['FACTORY-COMPLETE'] = "Yes";
+                } else {
+                    showMessage('Order must be issued to factory before completion');
+                    return;
+                }
+                break;
+            case 'DESPATCH-WRAPPED':
+            case 'DESPATCH-SENT':
+                if (jsonData.orders[orderKey]['FACTORY-COMPLETE']) {
+                    jsonData.orders[orderKey]['DISPATCH'] = formData.subArea;
+                } else {
+                    showMessage('Order must be factory complete before dispatch');
+                    return;
+                }
+                break;
+        }
 
-    // Add the log entry
-    jsonData.orders[orderKey].LOGS[timestamp] = newLog;
-    localStorage.setItem('orderData', JSON.stringify(jsonData));
-    
-    showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
-    orderForm.reset();
-});
+        // Add the log entry
+        jsonData.orders[orderKey].LOGS[timestamp] = newLog;
+        localStorage.setItem('orderData', JSON.stringify(jsonData));
+        
+        showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
+        orderForm.reset();
+    });
 
     // Export button
     exportBtn?.addEventListener('click', exportData);
