@@ -13,7 +13,7 @@
       "SOP": 11111,
       "RATING": "FIRE",
       "WRITTEN-UP": "Yes",
-      "ISSUED-TO-FACTORY": false,
+      "ISSUED-TO-FACTORY": "Yes",
       "FACTORY-COMPLETE": false,
       "DISPATCH": null,
       "LOGS": {
@@ -24,6 +24,82 @@
           "LINE": "1",
           "STARTTIME": "1303",
           "ENDTIME": "1303",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504161315": {
+          "DATE": "16/04/2025 13:15",
+          "USER": "FRANK",
+          "AREA": "OFFICE - ISSUED-FACTORY",
+          "LINE": "1",
+          "STARTTIME": "1315",
+          "ENDTIME": "1315",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504170759": {
+          "DATE": "17/04/2025 07:59",
+          "USER": "FRANK",
+          "AREA": "FIRE-DOORS - HAND-TOOLS",
+          "LINE": "1",
+          "STARTTIME": "0759",
+          "ENDTIME": "0759",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
+    },
+    "12323-FIRE": {
+      "SOP": 12323,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": "Yes",
+      "FACTORY-COMPLETE": false,
+      "DISPATCH": null,
+      "LOGS": {
+        "202504161346": {
+          "DATE": "16/04/2025 13:46",
+          "USER": "JIM",
+          "AREA": "OFFICE - WRITTEN-UP",
+          "LINE": "3",
+          "STARTTIME": "1346",
+          "ENDTIME": "1346",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504161347": {
+          "DATE": "16/04/2025 13:47",
+          "USER": "BOB",
+          "AREA": "OFFICE - WRITTEN-UP",
+          "LINE": "1",
+          "STARTTIME": "1347",
+          "ENDTIME": "1347",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504161348": {
+          "DATE": "16/04/2025 13:48",
+          "USER": "BOB",
+          "AREA": "OFFICE - WRITTEN-UP",
+          "LINE": "2",
+          "STARTTIME": "1348",
+          "ENDTIME": "1348",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504170737": {
+          "DATE": "17/04/2025 07:37",
+          "USER": "BOB",
+          "AREA": "FIRE-DOORS - HOT-PRESS",
+          "LINE": "1",
+          "STARTTIME": "0737",
+          "ENDTIME": "0737",
           "DURATION": 1,
           "STATUS": "COMPLETE",
           "NOTES": ""

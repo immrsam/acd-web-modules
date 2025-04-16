@@ -1,8 +1,13 @@
 // ======================
 // CORE DATA AND UTILITIES
 // ======================
-const url = './test.json';
+const DATA_URL = './test.json';
 let jsonData;
+
+let confirmModal;
+let currentFormData;
+let confirmYesQr;
+let confirmNoQr;
 
 // Function to set user and update UI accordingly
 function setUser() {
@@ -187,6 +192,14 @@ function createTimestamp(date) {
     ].join('');
 }
 
+function resetFocus(){
+    const sop = document.getElementById('sop');
+    if(sop){
+        sop.focus();
+        sop.select();
+    }
+}
+
 // ======================
 // LOCATION FUNCTIONALITY
 // ======================
@@ -322,6 +335,7 @@ function exportData() {
  */
 function setupScanPage() {
     console.log("Scan loaded");
+    resetFocus();
     
     const orderForm = document.getElementById('orderForm');
     const exportBtn = document.getElementById('exportBtn');
@@ -329,6 +343,38 @@ function setupScanPage() {
     const newOrderForm = document.getElementById('newOrderForm');
     const cancelNewOrderBtn = document.getElementById('cancelNewOrder');
     const closeModalBtn = document.querySelector('.close-modal');
+
+    confirmModal = document.getElementById('confirmModal');
+    confirmYesQr = document.getElementById('confirmYesQr');
+    confirmNoQr = document.getElementById('confirmNoQr');
+
+    // Button event listeners
+    document.getElementById('confirmYesBtn')?.addEventListener('click', () => {
+        confirmModal.style.display = 'none';
+        processOrderSubmission(currentFormData);
+    });
+    
+    document.getElementById('confirmNoBtn')?.addEventListener('click', () => {
+        confirmModal.style.display = 'none';
+        const endTimeInput = document.getElementById('endTimeInput');
+        
+        // Clear and focus
+        endTimeInput.value = '';
+        endTimeInput.focus();
+        endTimeInput.select();
+        
+        // Scroll to the field if needed
+        endTimeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Visual feedback
+        endTimeInput.style.border = '2px solid #ff9800'; // Orange border
+        setTimeout(() => {
+            endTimeInput.style.border = ''; // Revert after 1 second
+        }, 1000);
+        
+        showMessage('Submission cancelled - please check the end time');
+    });
+    
 
     if (!jsonData) {
         jsonData = JSON.parse(localStorage.getItem('orderData')) || { orders: {} };
@@ -356,6 +402,7 @@ function setupScanPage() {
     const hideNewOrderModal = () => {
         newOrderModal.style.display = 'none';
         newOrderForm?.reset();
+        resetFocus();
     };
 
     const showNewOrderModal = (sop, rating) => {
@@ -373,7 +420,7 @@ function setupScanPage() {
             hideNewOrderModal();
         }
     });
-
+    
     // New order form submission
     newOrderForm?.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -416,91 +463,117 @@ function setupScanPage() {
         hideNewOrderModal();
     });
 
-    // Main order form submission
-    orderForm?.addEventListener('submit', (e) => {
-        e.preventDefault();
+orderForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    currentFormData = {
+        sop: document.getElementById('sop').value.trim(),
+        user: document.getElementById('user').value.trim(),
+        lineSelect: document.getElementById('lineSelect').value.trim(),
+        area: document.getElementById('location').value.trim(),
+        subArea: document.getElementById('sub-option').value.trim(),
+        startTime: document.getElementById('startTimeInput').value.trim(),
+        endTime: document.getElementById('endTimeInput').value.trim(),
+        notes: document.getElementById('notesInput').value.trim(),
+        statusInput: document.getElementById('statusInput').value.trim(),
+        rating: document.getElementById('ratingSelect').value.trim()
+    };
+
+    if (!currentFormData.sop) {
+        showMessage('Please enter a valid SOP');
+        return;
+    }
+
+    // Generate QR codes for confirmation
+    generateConfirmationQRCodes();
+    
+    // Show confirmation modal
+    confirmModal.style.display = 'block';
+});
+
+function generateConfirmationQRCodes() {
+    try {
+        // Generate YES QR code
+        QRCode.toCanvas(confirmYesQr, 'CONFIRM_YES', { width: 150 }, function(error) {
+            if (error) console.error('YES QR error:', error);
+        });
         
-        const formData = {
-            sop: document.getElementById('sop').value.trim(),
-            user: document.getElementById('user').value.trim(),
-            lineSelect: document.getElementById('lineSelect').value.trim(),
-            area: document.getElementById('location').value.trim(),
-            subArea: document.getElementById('sub-option').value.trim(),
-            startTime: document.getElementById('startTimeInput').value.trim(),
-            endTime: document.getElementById('endTimeInput').value.trim(),
-            notes: document.getElementById('notesInput').value.trim(),
-            statusInput: document.getElementById('statusInput').value.trim(),
-            rating: document.getElementById('ratingSelect').value.trim()
-        };
+        // Generate NO QR code
+        QRCode.toCanvas(confirmNoQr, 'CONFIRM_NO', { width: 150 }, function(error) {
+            if (error) console.error('NO QR error:', error);
+        });
+    } catch (error) {
+        console.error('QR generation error:', error);
+        // QR codes are optional since we have buttons
+    }
+}
 
-        if (!formData.sop) {
-            showMessage('Please enter a valid SOP');
-            return;
-        }
+function processOrderSubmission(formData) {
+    const orderKey = `${formData.sop}-${formData.rating}`;
 
-        const orderKey = `${formData.sop}-${formData.rating}`;
+    // If order doesn't exist, show modal REGARDLESS of scan type
+    if (!jsonData.orders[orderKey]) {
+        showNewOrderModal(formData.sop, formData.rating);
+        return;
+    }
 
-        // If order doesn't exist, show modal REGARDLESS of scan type
-        if (!jsonData.orders[orderKey]) {
-            showNewOrderModal(formData.sop, formData.rating);
-            return;
-        }
+    const now = new Date();
+    const timestamp = createTimestamp(now);
+    const date = formatDate(now);
 
-        const now = new Date();
-        const timestamp = createTimestamp(now);
-        const date = formatDate(now);
+    const newLog = {
+        "DATE": date,
+        "USER": formData.user,
+        "AREA": `${formData.area} - ${formData.subArea}`,
+        "LINE": formData.lineSelect,
+        "STARTTIME": formData.startTime,
+        "ENDTIME": formData.endTime,
+        "DURATION": getDuration(formData.startTime, formData.endTime),
+        "STATUS": formData.statusInput,
+        "NOTES": formData.notes
+    };
 
-        const newLog = {
-            "DATE": date,
-            "USER": formData.user,
-            "AREA": `${formData.area} - ${formData.subArea}`,
-            "LINE": formData.lineSelect,
-            "STARTTIME": formData.startTime,
-            "ENDTIME": formData.endTime,
-            "DURATION": getDuration(formData.startTime, formData.endTime),
-            "STATUS": formData.statusInput,
-            "NOTES": formData.notes
-        };
+    // Update status if order exists
+    switch (`${formData.area}-${formData.subArea}`) {
+        case 'OFFICE-WRITTEN-UP':
+            jsonData.orders[orderKey]['WRITTEN-UP'] = "Yes";
+            break;
+        case 'OFFICE-ISSUED-FACTORY':
+            if (jsonData.orders[orderKey]['WRITTEN-UP'] === "Yes") {
+                jsonData.orders[orderKey]['ISSUED-TO-FACTORY'] = "Yes";
+            } else {
+                showMessage('Order must be written up before issuing to factory');
+                return;
+            }
+            break;
+        case 'OFFICE-FACTORY-COMPLETE':
+            if (jsonData.orders[orderKey]['ISSUED-TO-FACTORY']) {
+                jsonData.orders[orderKey]['FACTORY-COMPLETE'] = "Yes";
+            } else {
+                showMessage('Order must be issued to factory before completion');
+                return;
+            }
+            break;
+        case 'DESPATCH-WRAPPED':
+        case 'DESPATCH-SENT':
+            if (jsonData.orders[orderKey]['FACTORY-COMPLETE']) {
+                jsonData.orders[orderKey]['DISPATCH'] = formData.subArea;
+            } else {
+                showMessage('Order must be factory complete before dispatch');
+                return;
+            }
+            break;
+    }
 
-        // Update status if order exists
-        switch (`${formData.area}-${formData.subArea}`) {
-            case 'OFFICE-WRITTEN-UP':
-                jsonData.orders[orderKey]['WRITTEN-UP'] = "Yes";
-                break;
-            case 'OFFICE-ISSUED-FACTORY':
-                if (jsonData.orders[orderKey]['WRITTEN-UP'] === "Yes") {
-                    jsonData.orders[orderKey]['ISSUED-TO-FACTORY'] = "Yes";
-                } else {
-                    showMessage('Order must be written up before issuing to factory');
-                    return;
-                }
-                break;
-            case 'OFFICE-FACTORY-COMPLETE':
-                if (jsonData.orders[orderKey]['ISSUED-TO-FACTORY']) {
-                    jsonData.orders[orderKey]['FACTORY-COMPLETE'] = "Yes";
-                } else {
-                    showMessage('Order must be issued to factory before completion');
-                    return;
-                }
-                break;
-            case 'DESPATCH-WRAPPED':
-            case 'DESPATCH-SENT':
-                if (jsonData.orders[orderKey]['FACTORY-COMPLETE']) {
-                    jsonData.orders[orderKey]['DISPATCH'] = formData.subArea;
-                } else {
-                    showMessage('Order must be factory complete before dispatch');
-                    return;
-                }
-                break;
-        }
+    // Add the log entry
+    jsonData.orders[orderKey].LOGS[timestamp] = newLog;
+    localStorage.setItem('orderData', JSON.stringify(jsonData));
+    
+    showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
+    document.getElementById('orderForm').reset();
+    resetFocus();
+}
 
-        // Add the log entry
-        jsonData.orders[orderKey].LOGS[timestamp] = newLog;
-        localStorage.setItem('orderData', JSON.stringify(jsonData));
-        
-        showMessage(`Order ${formData.sop} (${formData.rating}) updated successfully!`);
-        orderForm.reset();
-    });
 
     // Export button
     exportBtn?.addEventListener('click', exportData);
@@ -540,14 +613,44 @@ function parseLogDate(dateString) {
 /**
  * Populates the data table with order information
  */
+
 function populateData() {
     const tableBody = document.querySelector('#dataTable tbody');
     if (!tableBody) return;
 
     tableBody.innerHTML = '';
 
+    // First, collect all orders into an array
+    const ordersArray = [];
     for (const orderKey in jsonData.orders) {
         const order = jsonData.orders[orderKey];
+        
+        // Find the newest log date for this order
+        let newestLogDate = null;
+        if (order.LOGS && Object.keys(order.LOGS).length > 0) {
+            const logEntries = Object.entries(order.LOGS);
+            logEntries.sort((a, b) => parseLogDate(b[1].DATE) - parseLogDate(a[1].DATE));
+            newestLogDate = parseLogDate(logEntries[0][1].DATE);
+        }
+        
+        ordersArray.push({
+            orderKey,
+            order,
+            newestLogDate
+        });
+    }
+
+    // Sort all orders by newest log date (newest first)
+    ordersArray.sort((a, b) => {
+        // Handle cases where dates might be null
+        if (!a.newestLogDate && !b.newestLogDate) return 0;
+        if (!a.newestLogDate) return 1;  // Put orders without dates at the end
+        if (!b.newestLogDate) return -1; // Put orders without dates at the end
+        return b.newestLogDate - a.newestLogDate; // Newest first
+    });
+
+    // Now populate the table in sorted order
+    for (const {orderKey, order} of ordersArray) {
         const row = document.createElement('tr');
 
         // SOP Cell with link
@@ -567,7 +670,6 @@ function populateData() {
         row.appendChild(createStatusCell(order['WRITTEN-UP']));
         row.appendChild(createStatusCell(order['ISSUED-TO-FACTORY']));
         row.appendChild(createStatusCell(order['FACTORY-COMPLETE']));
-        console.log(`SOP: ${orderKey}\nWRITTEN-UP: ${order['WRITTEN-UP']}\nISSUED-TO-FACTORY: ${order['ISSUED-TO-FACTORY']}\nFACTORY-COMPLETE: ${order['FACTORY-COMPLETE']}`);
         
         // Location and Date Cells
         const locationCell = document.createElement('td');
@@ -596,7 +698,6 @@ function populateData() {
         tableBody.appendChild(row);
     }
 }
-
 /**
  * Sets up search functionality for the job list
  */
@@ -712,6 +813,7 @@ function setupNewJobPage() {
         if (!existingOrder) {
             createNewOrder(sop, rating, user, writtenUp, notes);
             orderForm.reset();
+            resetFocus();
         } else {
             showMessage(`Order ${sop} (${rating}) already exists!`);
         }

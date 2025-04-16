@@ -69,7 +69,7 @@ h1 {
     /* Hide all buttons by default */
 }
 
-#HOME, #BACK, .visable  {
+#HOME, #BACK, .visible  {
     display: block; /* Home is always visible */
 }
 
@@ -144,7 +144,23 @@ header .buttons{
     align-items: center;
     gap: 10px;
 }
+.barcode-info {
+    background-color: #f8f9fa;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border-left: 4px solid #4d526b;
+}
 
+.barcode-info p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+
+.barcode-info strong {
+    color: #4d526b;
+    font-weight: bold;
+}
 form{
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.185);
     display: flex;
@@ -159,7 +175,13 @@ form{
     flex-direction: row;
     justify-content: center;
     padding: 0;
+    gap: 50px;
 
+}
+
+input[type=radio] {
+    width: 100%;
+    height: 2em;
 }
 
 .userRadio{
@@ -308,4 +330,57 @@ table{
 .close-modal:focus {
     color: black;
     text-decoration: none;
+}
+#qrPos{
+max-width: 450px;
+}
+
+#qrcode {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    display: inline-block;
+}
+
+.qr-confirm-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.qr-confirm-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qr-code {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+}
+
+.confirm-options-container {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.confirm-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.confirm-option canvas {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+.confirm-option button {
+    padding: 10px 20px;
+    width: 150px;
 }

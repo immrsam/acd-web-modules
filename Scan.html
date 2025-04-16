@@ -69,11 +69,11 @@
                 </datalist>
             </div>
             <div class="formLine">
-                <button type="button" id="startTimer" class="visable btn lbg">START</button>
+                <button type="button" id="startTimer" class="visible btn lbg">START</button>
                 <input type="text" name="startTimeInput" id="startTimeInput" required>
             </div>
             <div class="formLine">
-                <button type="button" id="endTimer" class="visable btn lbg">END</button>
+                <button type="button" id="endTimer" class="visible btn lbg">END</button>
                 <input type="text" name="endTimeInput" id="endTimeInput" required>
             </div>
             <div class="formLine">
@@ -91,14 +91,19 @@
             </div>
             <div class="formLine">
                 
-                <button type="submit" class="visable btn lbg">Submit</button>
-                <button id="exportBtn" class="visable btn lbg">Export to test.json</button>
+                <button type="submit" class="visible btn lbg">Submit</button>
+                <button id="exportBtn" class="visible btn lbg">Export to test.json</button>
             </div>
             <div id="messageDiv" class="fw"></div>
             <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
             
         </form>
-        
+        <div id="qrPos">
+            <h2>Scan this QR Code to<br>get the current time</h2>
+            <div id="qrcode">
+                <canvas id="qrCanvas"></canvas>
+            </div>
+        </div>
     </section>
     <p><b>*BEFORE LEAVING PAGE*</b></p>
     <p>Export the file and replace the existing JSON file in C:\Sam Bradbury\ACD_WEB_MODULES\test.json</p>
@@ -128,12 +133,69 @@
                     <textarea id="newNotes" rows="3"></textarea>
                 </div>
                 <div class="formLine">
-                    <button type="submit" class="visable btn lbg">Create Order</button>
-                    <button type="button" class="visable btn lbg" id="cancelNewOrder">Cancel</button>
+                    <button type="submit" class="visible btn lbg">Create Order</button>
+                    <button type="button" class="visible btn lbg" id="cancelNewOrder">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Confirm Submission?</h2>
+            <p>Scan QR code or press button:</p>
+            <div class="confirm-options-container">
+                <!-- Yes Option -->
+                <div class="confirm-option">
+                    <canvas id="confirmYesQr"></canvas>
+                    <button id="confirmYesBtn" class="visible btn lbg">YES - Submit</button>
+                </div>
+                <!-- No Option -->
+                <div class="confirm-option">
+                    <canvas id="confirmNoQr"></canvas>
+                    <button id="confirmNoBtn" class="visible btn lbg">NO - Keep Editing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="scripts.js"></script>
+    <script src="qrcode.min.js"></script>
+    <script>
+        // document.getElementById('formContent').addEventListener('submit', function (event) {
+        //     event.preventDefault();
+        //     console.log('Someone said hi!');
+        // });
+        
+        // Function to update time display and QR code
+        function updateAll() {
+            // Update the time display
+            // const now = new Date();
+            // document.getElementById('currentTime').textContent = `Current Time: ${now.toLocaleString()}`;
+            
+            // Update the QR code
+            updateQRCode();
+        }
+        
+        // Function to generate QR code with current info
+        function updateQRCode() {
+            
+            // Combine all information for the QR code
+            const qrData = `${getCurrentTime()}`;
+            
+            // Get the canvas element
+            const canvas = document.getElementById('qrCanvas');
+            
+            // Generate new QR code
+            QRCode.toCanvas(canvas, qrData, { width: 200 }, function (error) {
+                if (error) console.error(error);
+            });
+        }
+        
+        // Initial update
+        updateAll();
+        
+        // Update every second to keep time current
+        setInterval(updateAll, 1000);
+        </script>
 </body>
 </html>
