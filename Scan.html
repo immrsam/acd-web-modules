@@ -9,8 +9,27 @@
 <body>
     <header>
         <h1>SCAN PROGRESS</h1>
-        <a href="index.html" class="btn dbg">Home</a>
+        <div class="buttons">
+            <a id="HOME" class="btn dbg"href="index.html">Home</a>
+            <a id="JOBSCAN" class="btn dbg"href="Scan.html">Job Scan</a>
+            <a id="JOBLIST" class="btn dbg"href="JobList.html">Job List</a>
+            <a id="NEWJOB" class="btn dbg"href="newJob.html">New Job</a>
+        </div>
     </header>
+    <form class="userSelect">
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="AdminSelect" value="Admin">
+            <p>Admin</p>
+        </div> 
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="OfficeSelect" value="Office">
+            <p>Office</p>
+        </div>
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="FactorySelect" value="Factory">
+            <p>Factory</p>
+        </div>    
+    </form>
     <section class="container">
         <form id="orderForm">
             <input type="hidden" id="startBarcode" value="START-TIMER">
@@ -50,11 +69,11 @@
                 </datalist>
             </div>
             <div class="formLine">
-                <button type="button" id="startTimer" class="btn lbg">START</button>
+                <button type="button" id="startTimer" class="visable btn lbg">START</button>
                 <input type="text" name="startTimeInput" id="startTimeInput" required>
             </div>
             <div class="formLine">
-                <button type="button" id="endTimer" class="btn lbg">END</button>
+                <button type="button" id="endTimer" class="visable btn lbg">END</button>
                 <input type="text" name="endTimeInput" id="endTimeInput" required>
             </div>
             <div class="formLine">
@@ -72,8 +91,8 @@
             </div>
             <div class="formLine">
                 
-                <button type="submit" class="btn lbg">Submit</button>
-                <button id="exportBtn" class="btn lbg">Export to test.json</button>
+                <button type="submit" class="visable btn lbg">Submit</button>
+                <button id="exportBtn" class="visable btn lbg">Export to test.json</button>
             </div>
             <div id="messageDiv" class="fw"></div>
             <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
@@ -109,8 +128,8 @@
                     <textarea id="newNotes" rows="3"></textarea>
                 </div>
                 <div class="formLine">
-                    <button type="submit" class="btn lbg">Create Order</button>
-                    <button type="button" class="btn lbg" id="cancelNewOrder">Cancel</button>
+                    <button type="submit" class="visable btn lbg">Create Order</button>
+                    <button type="button" class="visable btn lbg" id="cancelNewOrder">Cancel</button>
                 </div>
             </form>
         </div>

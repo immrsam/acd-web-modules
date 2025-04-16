@@ -9,16 +9,32 @@
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css'>
     <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
     <link rel="stylesheet" href="scanStyle.css">
+    <script src="scripts.js"></script>
 </head>
 <body>
     <header>
-
-        <h1>HOME</h1>
-        <a class="btn dbg"href="Scan.html">Job Scan</a>
-        <a class="btn dbg"href="JobList.html">Job List</a>
-        <a class="btn dbg"href="newJob.html">New Job</a>
-
+        <h1>ACD TRACK & SCHEDULE</h1>
+        <div class="buttons">
+            <a id="HOME" class="btn dbg"href="index.html">Home</a>
+            <a id="JOBSCAN" class="btn dbg"href="Scan.html">Job Scan</a>
+            <a id="JOBLIST" class="btn dbg"href="JobList.html">Job List</a>
+            <a id="NEWJOB" class="btn dbg"href="newJob.html">New Job</a>
+        </div>
     </header>
+    <form class="userSelect">
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="AdminSelect" value="Admin">
+            <p>Admin</p>
+        </div> 
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="OfficeSelect" value="Office">
+            <p>Office</p>
+        </div>
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="FactorySelect" value="Factory">
+            <p>Factory</p>
+        </div>    
+    </form>
     <div class="container dbg" lang="en">
         <div class="box">
             <i class="fi fi-sr-eye-crossed icon"></i>

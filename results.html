@@ -9,11 +9,33 @@
 <body>
     <header>
         <h1>Page results</h1>
-        <a href="JobList.html" class="btn dbg">Back to List</a>
+        <div class="buttons">
+            <a id="HOME" class="btn dbg"href="index.html">Home</a>
+            <a id="JOBSCAN" class="btn dbg"href="Scan.html">Job Scan</a>
+            <a id="JOBLIST" class="btn dbg"href="JobList.html">Job List</a>
+            <a id="NEWJOB" class="btn dbg"href="newJob.html">New Job</a>
+        </div>
     </header>
+    <form class="userSelect">
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="AdminSelect" value="Admin">
+            <p>Admin</p>
+        </div> 
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="OfficeSelect" value="Office">
+            <p>Office</p>
+        </div>
+        <div class="userRadio">
+            <input type="radio" name="userSelect" id="FactorySelect" value="Factory">
+            <p>Factory</p>
+        </div>    
+    </form>
     <div class="container">
         <div id="order-info">
-            <h2 id="sop-number">xxx</h2>
+            <div class="listHeader">
+                <a href="JobList.html" id="BACK" class="btn dbg">Back to List</a>
+                <h2 id="sop-number">xxx</h2>
+            </div>
             <div id="logs-container">
                 <table id="logTable">
                     <thead>

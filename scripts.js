@@ -4,6 +4,76 @@
 const url = './test.json';
 let jsonData;
 
+// Function to set user and update UI accordingly
+function setUser() {
+    const admin = document.getElementById('AdminSelect');
+    const office = document.getElementById('OfficeSelect');
+    const factory = document.getElementById('FactorySelect');
+    
+    // Get buttons
+    const homeBtn = document.getElementById('HOME');
+    const jobScanBtn = document.getElementById('JOBSCAN');
+    const jobListBtn = document.getElementById('JOBLIST');
+    const newJobBtn = document.getElementById('NEWJOB');
+
+    // Get the current user from localStorage
+    let user = localStorage.getItem('User');
+    
+    if (user) {
+        // User exists in localStorage
+        console.log(`${user} SELECTED`);
+        admin.checked = (user === "Admin");
+        office.checked = (user === "Office");
+        factory.checked = (user === "Factory");
+    } else {
+        // First time load - default to Admin
+        console.log("NO USER - default admin");
+        user = "Admin";
+        localStorage.setItem('User', user);
+        admin.checked = true;
+    }
+    
+    // Update button visibility based on user level
+    updateButtonVisibility(user);
+}
+
+// Function to show/hide buttons based on user level
+function updateButtonVisibility(user) {
+    const homeBtn = document.getElementById('HOME');
+    const jobScanBtn = document.getElementById('JOBSCAN');
+    const jobListBtn = document.getElementById('JOBLIST');
+    const newJobBtn = document.getElementById('NEWJOB');
+    
+    // Home is always visible
+    homeBtn.style.display = 'block';
+    
+    switch(user) {
+        case 'Admin':
+            // Admin sees all buttons
+            jobScanBtn.style.display = 'block';
+            jobListBtn.style.display = 'block';
+            newJobBtn.style.display = 'block';
+            break;
+        case 'Office':
+            // Office sees Job Scan and Job List
+            jobScanBtn.style.display = 'block';
+            jobListBtn.style.display = 'block';
+            newJobBtn.style.display = 'none';
+            break;
+        case 'Factory':
+            // Factory sees only Job Scan
+            jobScanBtn.style.display = 'block';
+            jobListBtn.style.display = 'none';
+            newJobBtn.style.display = 'none';
+            break;
+        default:
+            // Default to Admin view if something goes wrong
+            jobScanBtn.style.display = 'block';
+            jobListBtn.style.display = 'block';
+            newJobBtn.style.display = 'block';
+    }
+}
+
 const locationOptions = {
     "OFFICE": ["WRITTEN-UP", "ISSUED-FACTORY", "FACTORY-COMPLETE"],
     "FIRE-DOORS": ["BEAM-SAW", "WALL-SAW", "PANEL-SAW", "COLD-PRESS", "HOT-PRESS", 
@@ -347,7 +417,6 @@ function setupScanPage() {
     });
 
     // Main order form submission
-    // Main order form submission
     orderForm?.addEventListener('submit', (e) => {
         e.preventDefault();
         
@@ -655,6 +724,35 @@ function setupNewJobPage() {
 // INITIALIZATION
 // ======================
 document.addEventListener('DOMContentLoaded', () => {
+    const admin = document.getElementById('AdminSelect');
+    const office = document.getElementById('OfficeSelect');
+    const factory = document.getElementById('FactorySelect');
+    
+    // Set initial user state
+    setUser();
+    
+    // Add change event listeners
+    admin.addEventListener('change', function() {
+        if (this.checked) {
+            localStorage.setItem('User', 'Admin');
+            updateButtonVisibility('Admin');
+        }
+    });
+    
+    office.addEventListener('change', function() {
+        if (this.checked) {
+            localStorage.setItem('User', 'Office');
+            updateButtonVisibility('Office');
+        }
+    });
+    
+    factory.addEventListener('change', function() {
+        if (this.checked) {
+            localStorage.setItem('User', 'Factory');
+            updateButtonVisibility('Factory');
+        }
+    });
+
     getData('./test.json', (data) => {
         jsonData = data;
         const path = window.location.pathname;
