@@ -311,24 +311,24 @@ function updateExistingOrder(orderKey, formData) {
  */
 function exportData() {
     try {
-        const rawData = localStorage.getItem('orderData');
-        const dataStr = JSON.stringify(JSON.parse(rawData), null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'test.json';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
+      const rawData = localStorage.getItem('orderData');
+      const dataStr = JSON.stringify(JSON.parse(rawData), null, 2);
+      
+      // Replace blob URL with data URL
+      const dataUrl = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'test.json';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+      }, 100);
     } catch (e) {
-        showMessage('Error exporting data: ' + e.message);
-        console.error('Export error:', e);
+      showMessage('Error exporting data: ' + e.message);
+      console.error('Export error:', e);
     }
-}
+  }
 
 /**
  * Sets up the scan page functionality

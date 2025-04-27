@@ -105,6 +105,60 @@
           "NOTES": ""
         }
       }
+    },
+    "78616-FIRE": {
+      "SOP": 78616,
+      "RATING": "FIRE",
+      "WRITTEN-UP": "Yes",
+      "ISSUED-TO-FACTORY": "Yes",
+      "FACTORY-COMPLETE": "Yes",
+      "DISPATCH": "SENT",
+      "LOGS": {
+        "202504280715": {
+          "DATE": "28/04/2025 07:15",
+          "USER": "BOB",
+          "AREA": "OFFICE - ISSUED-FACTORY",
+          "LINE": "1",
+          "STARTTIME": "0715",
+          "ENDTIME": "0715",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504280717": {
+          "DATE": "28/04/2025 07:17",
+          "USER": "BOB",
+          "AREA": "OFFICE - FACTORY-COMPLETE",
+          "LINE": "1",
+          "STARTTIME": "0717",
+          "ENDTIME": "0717",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504280718": {
+          "DATE": "28/04/2025 07:18",
+          "USER": "FRANK",
+          "AREA": "DESPATCH - WRAPPED",
+          "LINE": "1",
+          "STARTTIME": "0718",
+          "ENDTIME": "0718",
+          "DURATION": 1,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        },
+        "202504280719": {
+          "DATE": "28/04/2025 07:19",
+          "USER": "FRANK",
+          "AREA": "DESPATCH - SENT",
+          "LINE": "1",
+          "STARTTIME": "0719",
+          "ENDTIME": "1200",
+          "DURATION": 481,
+          "STATUS": "COMPLETE",
+          "NOTES": ""
+        }
+      }
     }
   }
 }

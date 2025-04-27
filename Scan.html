@@ -100,9 +100,12 @@
         </form>
         <div id="qrPos">
             <h2>Scan this QR Code to<br>get the current time</h2>
-            <div id="qrcode">
+            <div class="qrcode">
                 <canvas id="qrCanvas"></canvas>
             </div>
+            <!-- <div class="qrcode">
+                <canvas id="qrCanvasJson"></canvas>
+            </div> -->
         </div>
     </section>
     <p><b>*BEFORE LEAVING PAGE*</b></p>
@@ -161,18 +164,10 @@
     <script src="scripts.js"></script>
     <script src="qrcode.min.js"></script>
     <script>
-        // document.getElementById('formContent').addEventListener('submit', function (event) {
-        //     event.preventDefault();
-        //     console.log('Someone said hi!');
-        // });
         
         // Function to update time display and QR code
         function updateAll() {
-            // Update the time display
-            // const now = new Date();
-            // document.getElementById('currentTime').textContent = `Current Time: ${now.toLocaleString()}`;
-            
-            // Update the QR code
+         // Update the QR code
             updateQRCode();
         }
         
@@ -181,12 +176,17 @@
             
             // Combine all information for the QR code
             const qrData = `${getCurrentTime()}`;
+            const qrDataJson = "11111 FIRE FRANK 1 OFFICE WRITTEN-UP 1404 1404";
             
             // Get the canvas element
             const canvas = document.getElementById('qrCanvas');
+            const canvasJson = document.getElementById('qrCanvasJson');
             
             // Generate new QR code
             QRCode.toCanvas(canvas, qrData, { width: 200 }, function (error) {
+                if (error) console.error(error);
+            });
+            QRCode.toCanvas(canvasJson, qrDataJson, { width: 200 }, function (error) {
                 if (error) console.error(error);
             });
         }
