@@ -9,6 +9,236 @@ let currentFormData;
 let confirmYesQr;
 let confirmNoQr;
 
+// ======================
+// USER MANAGEMENT PAGE
+// ======================
+
+/**
+ * Sets up the user management page
+ */
+function setupUserManagementPage() {
+    console.log("User Management Loaded");
+    
+    const userForm = document.getElementById('userForm');
+    const exportUsersBtn = document.getElementById('exportUsersBtn');
+    
+    // Only proceed if current user is Admin
+    if (!currentUser || currentUser.accessLevel !== 'Admin') {
+        showMessage('Access denied - Admin privileges required', 'userMessage');
+        userForm.style.display = 'none';
+        return;
+    }
+    
+    // Load users data
+    loadUsers().then(() => {
+        populateUsersTable();
+    });
+    
+    // Form submission handler
+    userForm?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value.trim().toLowerCase();
+        const pin = document.getElementById('pin').value.trim();
+        const name = document.getElementById('name').value.trim().toUpperCase();
+        const accessLevel = document.getElementById('accessLevel').value;
+        
+        if (usersData.users[username]) {
+            showMessage('Username already exists!', 'userMessage');
+            return;
+        }
+        
+        if (!/^\d{4}$/.test(pin)) {
+            showMessage('PIN must be 4 digits', 'userMessage');
+            return;
+        }
+        
+        // Add new user
+        usersData.users[username] = {
+            pin: pin,
+            accessLevel: accessLevel,
+            name: name
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('usersData', JSON.stringify(usersData));
+        
+        showMessage(`User ${username} added successfully!`, 'userMessage');
+        userForm.reset();
+        populateUsersTable();
+    });
+    
+    // Export users button
+    exportUsersBtn?.addEventListener('click', exportUsersData);
+}
+
+/**
+ * Populates the users table with current user data
+ */
+function populateUsersTable() {
+    const tableBody = document.querySelector('#usersTable tbody');
+    if (!tableBody) return;
+    
+    tableBody.innerHTML = '';
+    
+    for (const username in usersData.users) {
+        const user = usersData.users[username];
+        const row = document.createElement('tr');
+        
+        // Username
+        const usernameCell = document.createElement('td');
+        usernameCell.textContent = username;
+        row.appendChild(usernameCell);
+        
+        // Name
+        const nameCell = document.createElement('td');
+        nameCell.textContent = user.name;
+        row.appendChild(nameCell);
+        
+        // Access Level
+        const accessCell = document.createElement('td');
+        accessCell.textContent = user.accessLevel;
+        row.appendChild(accessCell);
+        
+        // Actions (Delete button)
+        const actionsCell = document.createElement('td');
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className = 'btn lbg';
+        deleteBtn.addEventListener('click', () => deleteUser(username));
+        actionsCell.appendChild(deleteBtn);
+        row.appendChild(actionsCell);
+        
+        tableBody.appendChild(row);
+    }
+}
+
+/**
+ * Deletes a user from the system
+ * @param {string} username - The username to delete
+ */
+function deleteUser(username) {
+    if (!confirm(`Are you sure you want to delete user ${username}?`)) return;
+    
+    delete usersData.users[username];
+    localStorage.setItem('usersData', JSON.stringify(usersData));
+    populateUsersTable();
+    showMessage(`User ${username} deleted`, 'userMessage');
+}
+
+/**
+ * Exports users data to JSON file
+ */
+function exportUsersData() {
+    try {
+        const dataStr = JSON.stringify(usersData, null, 2);
+        const dataUrl = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = 'users.json';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+        }, 100);
+        showMessage('Users data exported to users.json', 'userMessage');
+    } catch (e) {
+        showMessage('Error exporting users data: ' + e.message, 'userMessage');
+        console.error('Export error:', e);
+    }
+}
+
+// Update the loadUsers function to check localStorage first
+async function loadUsers() {
+    try {
+        // Check localStorage first
+        const localUsers = localStorage.getItem('usersData');
+        if (localUsers) {
+            usersData = JSON.parse(localUsers);
+        } else {
+            // Fall back to fetching users.json
+            const response = await fetch('./users.json');
+            usersData = await response.json();
+            localStorage.setItem('usersData', JSON.stringify(usersData));
+        }
+    } catch (error) {
+        console.error('Error loading users:', error);
+        // Initialize empty users object if both methods fail
+        usersData = { users: {} };
+    }
+}
+
+// ======================
+// NEW LOGIN SYSTEM
+// ======================
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+let usersData = {};
+
+async function loadUsers() {
+    try {
+        const response = await fetch('./users.json');
+        usersData = await response.json();
+    } catch (error) {
+        console.error('Error loading users:', error);
+    }
+}
+
+function checkLogin() {
+    if (!currentUser && !window.location.pathname.includes('index.html')) {
+        window.location.href = 'index.html';
+        return false;
+    }
+    return true;
+}
+
+function setupLoginPage() {
+    const loginForm = document.getElementById('loginForm');
+    const loginMessage = document.getElementById('loginMessage');
+    
+    if (!loginForm) return;
+    
+    loadUsers();
+    
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const username = document.getElementById('username').value.trim().toLowerCase();
+        const pin = document.getElementById('pin').value.trim();
+        
+        if (!usersData.users[username]) {
+            loginMessage.textContent = 'Invalid username';
+            return;
+        }
+        
+        if (usersData.users[username].pin !== pin) {
+            loginMessage.textContent = 'Invalid PIN';
+            return;
+        }
+        
+        currentUser = {
+            username: username,
+            name: usersData.users[username].name,
+            accessLevel: usersData.users[username].accessLevel
+        };
+        
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        location.reload();
+    });
+}
+
+function setupLogout() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        });
+    }
+}
+
+// ======================
+// EXISTING FUNCTIONALITY (PRESERVED EXACTLY AS WAS)
+// ======================
+
 // Function to set user and update UI accordingly
 function setUser() {
     const admin = document.getElementById('AdminSelect');
@@ -22,7 +252,7 @@ function setUser() {
     const newJobBtn = document.getElementById('NEWJOB');
 
     // Get the current user from localStorage
-    let user = localStorage.getItem('User');
+    let user = currentUser?.accessLevel || localStorage.getItem('User');
     
     if (user) {
         // User exists in localStorage
@@ -40,6 +270,13 @@ function setUser() {
     
     // Update button visibility based on user level
     updateButtonVisibility(user);
+    
+    // Set user name in forms if available
+    if (currentUser) {
+        document.querySelectorAll('#user, #newUser').forEach(el => {
+            if (el) el.value = currentUser.name;
+        });
+    }
 }
 
 // Function to show/hide buttons based on user level
@@ -48,9 +285,16 @@ function updateButtonVisibility(user) {
     const jobScanBtn = document.getElementById('JOBSCAN');
     const jobListBtn = document.getElementById('JOBLIST');
     const newJobBtn = document.getElementById('NEWJOB');
+    const userManageBtn = document.getElementById('USERMANAGE');
+    const logoutBtn = document.getElementById('logoutBtn');
     
     // Home is always visible
     homeBtn.style.display = 'block';
+    
+    // Logout button is always visible when logged in
+    if (logoutBtn) {
+        logoutBtn.style.display = currentUser ? 'block' : 'none';
+    }
     
     switch(user) {
         case 'Admin':
@@ -58,24 +302,28 @@ function updateButtonVisibility(user) {
             jobScanBtn.style.display = 'block';
             jobListBtn.style.display = 'block';
             newJobBtn.style.display = 'block';
+            userManageBtn.style.display = 'block';
             break;
         case 'Office':
             // Office sees Job Scan and Job List
             jobScanBtn.style.display = 'block';
             jobListBtn.style.display = 'block';
             newJobBtn.style.display = 'none';
+            userManageBtn.style.display = 'none';
             break;
         case 'Factory':
             // Factory sees only Job Scan
             jobScanBtn.style.display = 'block';
             jobListBtn.style.display = 'none';
             newJobBtn.style.display = 'none';
+            userManageBtn.style.display = 'none';
             break;
         default:
             // Default to Admin view if something goes wrong
             jobScanBtn.style.display = 'block';
             jobListBtn.style.display = 'block';
             newJobBtn.style.display = 'block';
+            userManageBtn.style.display = 'block';
     }
 }
 
@@ -826,49 +1074,59 @@ function setupNewJobPage() {
 // INITIALIZATION
 // ======================
 document.addEventListener('DOMContentLoaded', () => {
-    const admin = document.getElementById('AdminSelect');
-    const office = document.getElementById('OfficeSelect');
-    const factory = document.getElementById('FactorySelect');
+    // Initialize login system
+    setupLoginPage();
+    setupLogout();
     
-    // Set initial user state
-    setUser();
-    
-    // Add change event listeners
-    admin.addEventListener('change', function() {
-        if (this.checked) {
-            localStorage.setItem('User', 'Admin');
-            updateButtonVisibility('Admin');
-        }
-    });
-    
-    office.addEventListener('change', function() {
-        if (this.checked) {
-            localStorage.setItem('User', 'Office');
-            updateButtonVisibility('Office');
-        }
-    });
-    
-    factory.addEventListener('change', function() {
-        if (this.checked) {
-            localStorage.setItem('User', 'Factory');
-            updateButtonVisibility('Factory');
-        }
-    });
-
-    getData('./test.json', (data) => {
-        jsonData = data;
-        const path = window.location.pathname;
+    // Only proceed with the rest if logged in or on index page
+    if (window.location.pathname.includes('index.html') || checkLogin()) {
+        // Existing initialization
+        const admin = document.getElementById('AdminSelect');
+        const office = document.getElementById('OfficeSelect');
+        const factory = document.getElementById('FactorySelect');
         
-        if (path.includes('results.html')) {
-            displayOrderDetails();
-        } else if (path.includes('JobList.html')) {
-            populateData();
-            setupSearch();
-        } else if (path.includes('Scan.html')) {
-            initializeLocationHandlers();
-            setupScanPage();
-        } else if (path.includes('newJob.html')) {
-            setupNewJobPage();
+        if (admin && office && factory) {
+            setUser();
+            
+            admin.addEventListener('change', function() {
+                if (this.checked && (!currentUser || currentUser.accessLevel === 'Admin')) {
+                    localStorage.setItem('User', 'Admin');
+                    updateButtonVisibility('Admin');
+                }
+            });
+            
+            office.addEventListener('change', function() {
+                if (this.checked && (!currentUser || currentUser.accessLevel === 'Office' || currentUser.accessLevel === 'Admin')) {
+                    localStorage.setItem('User', 'Office');
+                    updateButtonVisibility('Office');
+                }
+            });
+            
+            factory.addEventListener('change', function() {
+                if (this.checked) {
+                    localStorage.setItem('User', 'Factory');
+                    updateButtonVisibility('Factory');
+                }
+            });
         }
-    });
+
+        getData('./test.json', (data) => {
+            jsonData = data;
+            const path = window.location.pathname;
+            
+            if (path.includes('results.html')) {
+                displayOrderDetails();
+            } else if (path.includes('JobList.html')) {
+                populateData();
+                setupSearch();
+            } else if (path.includes('Scan.html')) {
+                initializeLocationHandlers();
+                setupScanPage();
+            } else if (path.includes('newJob.html')) {
+                setupNewJobPage();
+            } else if (path.includes('users.html')) {
+                setupUserManagementPage();
+            }
+        });
+    }
 });

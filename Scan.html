@@ -10,10 +10,12 @@
     <header>
         <h1>SCAN PROGRESS</h1>
         <div class="buttons">
-            <a id="HOME" class="btn dbg"href="index.html">Home</a>
-            <a id="JOBSCAN" class="btn dbg"href="Scan.html">Job Scan</a>
-            <a id="JOBLIST" class="btn dbg"href="JobList.html">Job List</a>
-            <a id="NEWJOB" class="btn dbg"href="newJob.html">New Job</a>
+            <a id="HOME" class="btn dbg" href="index.html">Home</a>
+            <a id="JOBSCAN" class="btn dbg" href="Scan.html">Job Scan</a>
+            <a id="JOBLIST" class="btn dbg" href="JobList.html">Job List</a>
+            <a id="NEWJOB" class="btn dbg" href="newJob.html">New Job</a>
+            <a id="USERMANAGE" class="btn dbg" href="users.html">Users</a>
+            <button id="logoutBtn" class="btn dbg">Logout</button>
         </div>
     </header>
     <form class="userSelect">
@@ -35,16 +37,16 @@
             <input type="hidden" id="startBarcode" value="START-TIMER">
             <input type="hidden" id="stopBarcode" value="STOP-TIMER">
             <div class="formLine">
+                <label for="user">USER</label>
+                <input type="text" id="user" required>
+            </div>
+            <div class="formLine">
                 <label for="sop">SOP</label>
                 <input type="number" id="sop" required>
             </div>
             <div class="formLine">
                 <label for="ratingSelect">RATING</label>
                 <input type="text" name="ratingSelect" id="ratingSelect" required/>
-            </div>
-            <div class="formLine">
-                <label for="user">USER</label>
-                <input type="text" id="user" required>
             </div>
             <div class="formLine">
                 <label for="lineSelect">LINE</label>
@@ -116,16 +118,16 @@
             <h2>Order Not Found - Create New?</h2>
             <form id="newOrderForm">
                 <div class="formLine">
+                    <label for="newUser">USER</label>
+                    <input type="text" id="newUser" required>
+                </div>
+                <div class="formLine">
                     <label for="newSop">SOP</label>
                     <input type="number" id="newSop" readonly>
                 </div>
                 <div class="formLine">
                     <label for="newRating">RATING</label>
                     <input type="text" id="newRating" readonly>
-                </div>
-                <div class="formLine">
-                    <label for="newUser">USER</label>
-                    <input type="text" id="newUser" required>
                 </div>
                 <div class="formLine">
                     <label for="newWrittenUp">Written Up?</label>
@@ -197,5 +199,26 @@
         // Update every second to keep time current
         setInterval(updateAll, 1000);
         </script>
+            <script>
+                // Check login state on page load
+                document.addEventListener('DOMContentLoaded', function() {
+                    const currentUserLogged = JSON.parse(localStorage.getItem('currentUser'));
+                    
+                    if (currentUserLogged) {
+                        // User is logged in - show main content
+                        if(document.getElementById('loginModal')){
+                            document.getElementById('loginModal').style.display = 'none';
+                        }
+                        document.querySelector('header').style.display = 'flex';
+                        document.querySelector('.container').style.display = 'flex';
+                        
+                        // Set user radio button based on access level
+                        document.getElementById(`${currentUserLogged.accessLevel}Select`).checked = true;
+                    } else {
+                        // User not logged in - show login modal
+                        document.getElementById('loginModal').style.display = 'block';
+                    }
+                });
+            </script>
 </body>
 </html>

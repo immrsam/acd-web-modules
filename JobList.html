@@ -12,10 +12,12 @@
     <header>
         <h1>ACD JOB TRACK</h1>
         <div class="buttons">
-            <a id="HOME" class="btn dbg"href="index.html">Home</a>
-            <a id="JOBSCAN" class="btn dbg"href="Scan.html">Job Scan</a>
-            <a id="JOBLIST" class="btn dbg"href="JobList.html">Job List</a>
-            <a id="NEWJOB" class="btn dbg"href="newJob.html">New Job</a>
+            <a id="HOME" class="btn dbg" href="index.html">Home</a>
+            <a id="JOBSCAN" class="btn dbg" href="Scan.html">Job Scan</a>
+            <a id="JOBLIST" class="btn dbg" href="JobList.html">Job List</a>
+            <a id="NEWJOB" class="btn dbg" href="newJob.html">New Job</a>
+            <a id="USERMANAGE" class="btn dbg" href="users.html">Users</a>
+            <button id="logoutBtn" class="btn dbg">Logout</button>
         </div>
         
     </header>
@@ -58,6 +60,28 @@
             No jobs found matching your search.
         </div>
     </div>
-    <script src="./scripts.js" ></script>    
+    <script src="./scripts.js" ></script>
+    <script>
+        // Check login state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUserLogged = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (currentUserLogged) {
+                // User is logged in - show main content
+                if(document.getElementById('loginModal')){
+                            document.getElementById('loginModal').style.display = 'none';
+                }
+                document.querySelector('header').style.display = 'flex';
+                document.querySelector('.userSelect').style.display = 'flex';
+                document.querySelector('.container').style.display = 'flex';
+                
+                // Set user radio button based on access level
+                document.getElementById(`${currentUserLogged.accessLevel}Select`).checked = true;
+            } else {
+                // User not logged in - show login modal
+                document.getElementById('loginModal').style.display = 'block';
+            }
+        });
+    </script>
 </body>
 </html>

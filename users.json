@@ -1,0 +1,24 @@
+{
+  "users": {
+    "bob": {
+      "pin": "1234",
+      "accessLevel": "Factory",
+      "name": "BOB"
+    },
+    "frank": {
+      "pin": "5678",
+      "accessLevel": "Office",
+      "name": "FRANK"
+    },
+    "jim": {
+      "pin": "9012",
+      "accessLevel": "Admin",
+      "name": "JIM"
+    },
+    "sam": {
+      "pin": "0308",
+      "accessLevel": "Admin",
+      "name": "SAMUEL"
+    }
+  }
+}

@@ -171,7 +171,7 @@ form{
 }
 
 .userSelect{
-    display: flex;
+    display: none;
     flex-direction: row;
     justify-content: center;
     padding: 0;
@@ -383,4 +383,28 @@ max-width: 450px;
 .confirm-option button {
     padding: 10px 20px;
     width: 150px;
+}
+
+/* Add to existing styles */
+#loginModal .modal-content {
+    max-width: 400px;
+    text-align: center;
+}
+
+#loginForm {
+    padding: 20px;
+}
+
+#loginForm .formLine {
+    margin-bottom: 15px;
+}
+
+#loginMessage {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+#logoutBtn {
+    margin-left: 10px;
 }

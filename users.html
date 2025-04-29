@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="scanStyle.css">
-    <title>New Job</title>
+    <title>User Management</title>
+    <link rel="stylesheet" href="./scanStyle.css">
 </head>
 <body>
     <header>
-        <h1>NEW JOB</h1>
+        <h1>USER MANAGEMENT</h1>
         <div class="buttons">
             <a id="HOME" class="btn dbg" href="index.html">Home</a>
             <a id="JOBSCAN" class="btn dbg" href="Scan.html">Job Scan</a>
@@ -33,41 +33,51 @@
         </div>    
     </form>
     <div class="container">
-        <form id="orderForm">
+        <form id="userForm">
             <div class="formLine">
-                <label for="sopNumber">SOP</label>
-                <input type="number" name="sopNumber" id="sopNumber" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" required maxlength="10">
             </div>
             <div class="formLine">
-                <label for="user">USER</label>
-                <input type="text" id="user" required>
+                <label for="pin">PIN</label>
+                <input type="password" id="pin" required maxlength="4" pattern="\d{4}">
             </div>
             <div class="formLine">
-                <label for="ratingSelect">RATING</label>
-                <select name="ratingSelect" id="ratingSelect">
-                    <option value="FIRE">Fire Door</option>
-                    <option value="FLUSH">Flush Panel</option>
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="formLine">
+                <label for="accessLevel">Access Level</label>
+                <select id="accessLevel" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Office">Office</option>
+                    <option value="Factory">Factory</option>
                 </select>
             </div>
             <div class="formLine">
-                <label for="writtenUp">Written Up?</label>
-                <input type="checkbox" name="writtenUp" id="writtenUp" value="yes">
+                <button type="submit" class="visible btn lbg">Add User</button>
+                <button type="button" id="exportUsersBtn" class="visible btn lbg">Export Users</button>
             </div>
-            <div class="formLine">
-                <label for="notesInput">Notes</label>
-                <textarea type="text" name="notesInput" id="notesInput" rows="3" col="4"></textarea>
-            </div>
-            
-            <div class="formLine">
-                
-                <button type="submit" class="visible btn lbg">Submit</button>
-                <button id="exportBtn" class="visible btn lbg">Export to test.json</button>
-            </div>
-            <div id="messageDiv" class="fw"></div>
-            <input type="file" name="fileInput" id="fileInput" accept=".json" style="display: none;">
+            <div id="userMessage" class="fw"></div>
         </form>
+        
+        <div id="usersTableContainer">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Access Level</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Users will be populated here -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script src="scripts.js"></script>
+    <script src="./scripts.js"></script>
     <script>
         // Check login state on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -75,9 +85,7 @@
             
             if (currentUserLogged) {
                 // User is logged in - show main content
-                if(document.getElementById('loginModal')){
-                            document.getElementById('loginModal').style.display = 'none';
-                        }
+                document.getElementById('loginModal').style.display = 'none';
                 document.querySelector('header').style.display = 'flex';
                 document.querySelector('.userSelect').style.display = 'flex';
                 document.querySelector('.container').style.display = 'flex';
